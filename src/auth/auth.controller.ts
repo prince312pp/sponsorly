@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
@@ -27,6 +27,12 @@ export class AuthController {
   @Post('profile')
   async getProfile(@Body() body: { email: string }) {
     return this.authService.getProfile(body.email);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('update-profile')
+  async updateProfile(@Body() updateData: any) {
+    return this.authService.updateProfile(updateData);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -10,14 +10,15 @@
     <style>
         .profile-section {
             padding: 2rem 0;
-            background-color: #f3f4f6;
+            background-color: var(--light-gray);
             min-height: calc(100vh - 80px);
         }
         .profile-card {
-            background: white;
+            background: var(--bg-color);
             padding: 3rem;
             border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--caffeine-border);
             max-width: 800px;
             margin: 0 auto;
         }
@@ -26,7 +27,7 @@
             align-items: center;
             gap: 2rem;
             margin-bottom: 2rem;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--caffeine-border);
             padding-bottom: 2rem;
         }
         .profile-avatar {
@@ -48,7 +49,7 @@
         .profile-role {
             display: inline-block;
             padding: 0.25rem 0.75rem;
-            background-color: #dbeafe;
+            background-color: var(--light-gray);
             color: var(--primary-color);
             border-radius: 9999px;
             font-size: 0.875rem;
@@ -63,17 +64,21 @@
         }
         .detail-item {
             margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--caffeine-border);
+            background: var(--light-gray);
         }
         .detail-label {
             font-size: 0.875rem;
-            color: #6b7280;
+            color: var(--secondary-color);
             margin-bottom: 0.25rem;
             font-weight: 500;
         }
         .detail-value {
             font-size: 1.125rem;
             font-weight: 600;
-            color: #111827;
+            color: var(--text-color);
         }
         .full-width {
             grid-column: span 2;
@@ -92,9 +97,57 @@
         .connect-btn:hover {
             opacity: 0.9;
         }
+        
+        /* Dark mode styles for profile */
+        [data-theme="dark"] .profile-section {
+            background-color: var(--dark-surface);
+        }
+        
+        [data-theme="dark"] .profile-card {
+            background: var(--dark-surface);
+            color: var(--dark-text);
+            border: 1px solid var(--dark-border);
+        }
+        
+        [data-theme="dark"] .detail-item {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+        }
+        
+        [data-theme="dark"] .profile-header {
+            border-bottom: 1px solid var(--dark-border);
+        }
+        
+        [data-theme="dark"] .profile-role {
+            background-color: var(--dark-hover-bg);
+            color: var(--primary-color);
+        }
+        
+        [data-theme="dark"] .detail-label {
+            color: var(--dark-secondary-text);
+        }
+        
+        [data-theme="dark"] .detail-value {
+            color: var(--dark-text);
+        }
+        
+        [data-theme="dark"] .nav-links a {
+            color: var(--dark-secondary-text);
+        }
+        
+        [data-theme="dark"] .nav-links a:hover {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
+    <div class="fixed-theme-toggle">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 1 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
@@ -113,6 +166,7 @@
                     <div class="profile-info">
                         <h1 id="full-name">Loading...</h1>
                         <span class="profile-role" id="role-badge">Role</span>
+                        <div id="profile-actions"></div>
                         <div id="connect-container"></div>
                     </div>
                 </div>
@@ -164,11 +218,23 @@
             document.getElementById('avatar-initials').textContent = user.firstName[0];
             document.getElementById('role-badge').textContent = user.role;
 
+            // Add Edit Profile button if viewing own profile
+            const profileActions = document.getElementById('profile-actions');
+            if (user.email === userSession.email) {
+                profileActions.innerHTML = `
+                    <a href="edit-profile.html" class="btn btn-secondary" style="margin-right: 1rem; display: inline-block; margin-top: 1rem;">Edit Profile</a>
+                `;
+            } else {
+                profileActions.innerHTML = '';
+            }
+
             // Add Connect Now button if viewing someone else
             if (user.email !== userSession.email) {
                 document.getElementById('connect-container').innerHTML = `
                     <a href="mailto:${user.email}?subject=Sponsorship Inquiry from Sponsorly" class="connect-btn">Connect Now</a>
                 `;
+            } else {
+                document.getElementById('connect-container').innerHTML = '';
             }
 
             const grid = document.getElementById('profile-details');
@@ -254,6 +320,48 @@
         }
 
         fetchProfile();
+    </script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('svg');
+        
+        // Check for saved theme preference or respect OS setting
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // Set initial theme
+        if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            updateThemeIcon('sun'); // Show sun icon when in dark mode
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            updateThemeIcon('bulb'); // Show bulb icon when in light mode
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                updateThemeIcon('moon');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                updateThemeIcon('sun');
+            }
+        });
+        
+        function updateThemeIcon(theme) {
+            if (theme === 'sun') {
+                themeIcon.innerHTML = `<path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M4.22 4.22l1.42 1.42"></path><path d="M18.36 18.36l1.42 1.42"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="M4.22 19.78l1.42-1.42"></path><path d="M18.36 5.64l1.42-1.42"></path>`;
+            } else if (theme === 'bulb') {
+                themeIcon.innerHTML = `<path d="M9 18h6m-3-12a9 9 0 1 1-9 9 9 9 0 0 1 9-9z"></path><path d="M12 12v3"></path><path d="M12 15h.01"></path>`;
+            } else {
+                themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 1 21 12.79z"></path>`;
+            }
+        }
     </script>
 </body>
 </html>

@@ -114,6 +114,25 @@ export class AuthService {
     return user;
   }
 
+  async updateProfile(updateData: any) {
+    const { email, ...updates } = updateData;
+    
+    // Remove email from updates since it's used as identifier
+    delete updates.email;
+    
+    const user = await this.userModel.findOneAndUpdate(
+      { email },
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+    
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    
+    return { message: 'Profile updated successfully', user };
+  }
+
   async discover(role: string) {
     // If sponsor, see creators. If creator, see sponsors.
     const targetRole = role === 'sponsor' ? 'creator' : 'sponsor';
