@@ -1,17 +1,18 @@
-:root {
+﻿:root {
+    /* Dark theme as default */
     --primary-color: #d20f39; /* Caffeine red */
-    --secondary-color: #6c7086; /* Caffeine gray */
-    --bg-color: #ffffff;
-    --text-color: #45475a;
-    --light-gray: #f5f5f7;
+    --secondary-color: #a6adc8; /* Light gray for dark mode */
+    --bg-color: #1e1e2e; /* Dark background */
+    --text-color: #cdd6f4; /* Light text */
+    --light-gray: #313244; /* Dark surface */
     --border-radius: 12px;
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     --caffeine-red: #d20f39;
     --caffeine-dark: #1e1e2e;
-    --caffeine-light-gray: #f5f5f7;
-    --caffeine-border: #bac2de;
-    --caffeine-hover-bg: #f0f0f2;
-    /* Dark mode variables */
+    --caffeine-light-gray: #313244;
+    --caffeine-border: #45475a;
+    --caffeine-hover-bg: #393a4f;
+    /* Dark mode variables (now default) */
     --dark-bg: #1e1e2e;
     --dark-surface: #313244;
     --dark-text: #cdd6f4;
@@ -42,8 +43,8 @@ body {
 /* Navbar */
 .navbar {
     padding: 1.5rem 0;
-    background: #fff;
-    border-bottom: 1px solid var(--caffeine-border);
+    background: var(--dark-bg);
+    border-bottom: 1px solid var(--dark-border);
 }
 
 .navbar .container {
@@ -165,9 +166,10 @@ body {
 
 /* Trust Strip */
 .trust-strip {
-    background-color: var(--caffeine-light-gray);
+    background-color: var(--dark-surface);
     padding: 2rem 0;
     text-align: center;
+    border-top: 1px solid var(--dark-border);
 }
 
 .trust-items {
@@ -182,6 +184,7 @@ body {
 /* How it Works */
 .how-it-works {
     padding: 6rem 0;
+    background-color: var(--dark-surface);
 }
 
 .how-it-works h2 {
@@ -200,11 +203,11 @@ body {
 
 /* CARD */
 .how-column {
-    background: #fff;
+    background: var(--dark-surface);
     padding: 2rem;
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--caffeine-border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--dark-border);
 
     display: flex;
     flex-direction: column;
@@ -234,15 +237,15 @@ body {
 }
 
 .how-column li::before {
-    content: "→";
+    content: "â†’";
     position: absolute;
     left: 0;
     color: var(--primary-color);
 }
 
-/* NOTE — PUSH TO BOTTOM */
+/* NOTE â€” PUSH TO BOTTOM */
 .note {
-    margin-top: auto; /* 🔥 THIS IS THE MAGIC */
+    margin-top: auto; /* ðŸ”¥ THIS IS THE MAGIC */
     padding-top: 1.5rem;
     font-size: 0.875rem;
     color: var(--secondary-color);

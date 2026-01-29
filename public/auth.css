@@ -3,18 +3,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--caffeine-light-gray);
+    background-color: var(--dark-bg);
     padding: 2rem;
 }
 
 .auth-card {
-    background: white;
+    background: var(--dark-surface);
     padding: 3rem;
     border-radius: 12px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: 600px;
     text-align: center;
+    color: var(--dark-text);
+    border: 1px solid var(--dark-border);
 }
 
 .auth-card h1 {
@@ -23,7 +25,7 @@
 }
 
 .auth-card p {
-    color: var(--secondary-color);
+    color: var(--dark-secondary-text);
     margin-bottom: 2rem;
 }
 
@@ -56,10 +58,12 @@ form {
 .form-group textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid var(--caffeine-border);
+    border: 1px solid var(--dark-border);
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
+    background: var(--dark-bg);
+    color: var(--dark-text);
 }
 
 .form-group input:focus, 
@@ -126,44 +130,45 @@ form {
     font-weight: 600;
 }
 
-/* Dark mode styles for auth pages */
-[data-theme="dark"] .auth-container {
-    background-color: var(--dark-surface);
+/* All styles now default to dark theme */
+.auth-container {
+    background-color: var(--dark-bg);
 }
 
-[data-theme="dark"] .auth-card {
+.auth-card {
     background: var(--dark-surface);
     color: var(--dark-text);
+    border: 1px solid var(--dark-border);
 }
 
-[data-theme="dark"] .auth-card p {
+.auth-card p {
     color: var(--dark-secondary-text);
 }
 
-[data-theme="dark"] .auth-footer a {
+.auth-footer a {
     color: var(--primary-color);
 }
 
-[data-theme="dark"] .form-group input,
-[data-theme="dark"] .form-group select,
-[data-theme="dark"] .form-group textarea {
+.form-group input,
+.form-group select,
+.form-group textarea {
     background: var(--dark-bg);
     color: var(--dark-text);
     border: 1px solid var(--dark-border);
 }
 
-[data-theme="dark"] .form-group input::placeholder,
-[data-theme="dark"] .form-group select::placeholder,
-[data-theme="dark"] .form-group textarea::placeholder {
+.form-group input::placeholder,
+.form-group select::placeholder,
+.form-group textarea::placeholder {
     color: var(--dark-secondary-text);
 }
 
-[data-theme="dark"] .btn-add-link {
+.btn-add-link {
     background: var(--primary-color);
     color: white;
 }
 
-[data-theme="dark"] .btn-remove-link {
+.btn-remove-link {
     background: #450a0a;
     color: #fecaca;
 }
