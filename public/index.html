@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsorly | Where Brands Meet the Right Creators</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">Sponsorly</div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#how-it-works">How it Works</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li id="auth-link"><a href="#" class="btn-signin" onclick="window.location.href='login.html'">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>Where Brands Meet the Right Creators</h1>
+            <p class="sub-headline">Sponsorly helps sponsors discover creators and creators land meaningful brand collaborations — simply, transparently, and fast.</p>
+            <div class="hero-ctas">
+                <a href="register-sponsor.html" class="btn btn-primary">Get Started as Sponsor</a>
+                <a href="register-creator.html" class="btn btn-secondary">Join as Creator</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="trust-strip">
+        <div class="container">
+            <p>Built for brands, creators, and modern collaborations.</p>
+            <div class="trust-items">
+                <span>Role-locked profiles</span>
+                <span>No spam. No middlemen.</span>
+                <span>Direct sponsorship requests</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2>How Sponsorly Works</h2>
+            <div class="how-grid">
+                <div class="how-column">
+                    <h3>For Sponsors</h3>
+                    <ul>
+                        <li>Browse verified creator profiles</li>
+                        <li>Send sponsorship requests</li>
+                        <li>Track status — accepted, rejected, completed</li>
+                    </ul>
+                </div>
+                <div class="how-column">
+                    <h3>For Creators</h3>
+                    <ul>
+                        <li>Create your profile</li>
+                        <li>Discover sponsor campaigns</li>
+                        <li>Accept or decline requests</li>
+                    </ul>
+                    <p class="note">No dashboards. No clutter. Everything happens on your profile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="why-exists">
+        <div class="container">
+            <div class="problem-solution">
+                <div class="problem">
+                    <h3>The Problem</h3>
+                    <p>Finding the right creator or brand shouldn’t feel like guesswork.</p>
+                </div>
+                <div class="solution">
+                    <h3>The Solution</h3>
+                    <p>Sponsorly replaces endless DMs, emails, and agencies with a clean, profile-based sponsorship platform.</p>
+                    <div class="solution-highlights">
+                        <span>Transparent pricing</span>
+                        <span>Clear expectations</span>
+                        <span>Direct communication</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="container">
+            <h2>Popular Sponsorship Categories</h2>
+            <div class="category-grid">
+                <div class="category-card">Tech</div>
+                <div class="category-card">Fashion</div>
+                <div class="category-card">Fitness</div>
+                <div class="category-card">Gaming</div>
+                <div class="category-card">Music</div>
+                <div class="category-card">Education</div>
+                <div class="category-card">Startups</div>
+                <div class="category-card">Local Businesses</div>
+            </div>
+            <p class="niche-text">Find collaborations that actually fit your niche.</p>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔒 Role locked accounts</h4>
+                    <p>no confusion, no misuse</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📩 Request-based collaborations</h4>
+                    <p>full control</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔔 Built-in notifications</h4>
+                    <p>never miss a deal</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📱 Mobile friendly</h4>
+                    <p>manage sponsorships anywhere</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to collaborate the right way?</h2>
+            <div class="cta-buttons">
+                <a href="register-sponsor.html" class="btn btn-primary">Create Sponsor Account</a>
+                <a href="register-creator.html" class="btn btn-secondary">Create Creator Account</a>
+            </div>
+            <p class="small-text">Free to join. No hidden charges.</p>
+        </div>
+    </section>
+
+    <footer id="contact" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Contact Support</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="#">Twitter</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            const authLink = document.getElementById('auth-link');
+            authLink.innerHTML = `
+                <a href="profile.html" class="profile-icon" title="My Profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+            `;
+            
+            // Optionally add Dashboard link if not present
+            const navLinks = document.getElementById('nav-links');
+            const dashLi = document.createElement('li');
+            dashLi.innerHTML = '<a href="dashboard.html">Dashboard</a>';
+            navLinks.insertBefore(dashLi, authLink);
+        }
+    </script>
+</body>
+</html>

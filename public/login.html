@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="logo"><a href="index.html">Sponsorly</a></div>
+            <h1>Welcome Back</h1>
+            <p>Sign in to manage your sponsorships.</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="john@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required placeholder="••••••••">
+                </div>
+
+                <div id="error-message" style="color: #ef4444; font-size: 0.875rem; margin-bottom: 1rem; display: none;"></div>
+
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+            <p class="auth-footer">Don't have an account? <br>
+                <a href="register-creator.html">Join as Creator</a> or <a href="register-sponsor.html">Join as Sponsor</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const res = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                
+                if (res.ok) {
+                    if (result.verified === false) {
+                        localStorage.setItem('pendingEmail', result.email);
+                        errorDiv.style.display = 'block';
+                        errorDiv.innerHTML = `${result.message} <a href="verify-otp.html" style="color: #2563eb; text-decoration: underline;">Click here to verify</a>`;
+                    } else {
+                        alert('Login successful!');
+                        localStorage.setItem('user', JSON.stringify(result.user));
+                        localStorage.setItem('access_token', result.access_token);
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    errorDiv.textContent = result.message;
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Something went wrong. Please try again.';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

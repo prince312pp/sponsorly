@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .dashboard-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background-color: #f3f4f6;
+        }
+        .dashboard-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .logout-btn {
+            margin-top: 2rem;
+            display: inline-block;
+            cursor: pointer;
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        .discovery-section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .discovery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .info p {
+            margin: 0.2rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        .view-all {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links">
+                <li><a href="discovery.html">Discovery</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="dashboard-container" style="height: auto; min-height: 200px; padding: 4rem 0;">
+        <div class="dashboard-card">
+            <h1 id="welcome-msg">Loading...</h1>
+            <p id="role-msg"></p>
+        </div>
+    </div>
+
+    <div class="discovery-section">
+        <div class="section-header">
+            <h2 id="discovery-title">Recommended for You</h2>
+            <a href="discovery.html" class="view-all">View All</a>
+        </div>
+        <div id="discovery-grid" class="discovery-grid">
+            <!-- Dynamic cards will appear here -->
+        </div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('welcome-msg').textContent = `Welcome, ${user.firstName}!`;
+            if (user.role === 'creator') {
+                document.getElementById('role-msg').textContent = "This is creator homepage";
+                document.getElementById('discovery-title').textContent = "Featured Sponsors";
+            } else if (user.role === 'sponsor') {
+                document.getElementById('role-msg').textContent = "This is sponsor homepage";
+                document.getElementById('discovery-title').textContent = "Top Creators";
+            }
+            fetchDiscovery();
+        }
+
+        async function fetchDiscovery() {
+            try {
+                const res = await fetch('/auth/discover', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify({ role: user.role })
+                });
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                const data = await res.json();
+                if (res.ok) {
+                    renderCards(data);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderCards(items) {
+            const grid = document.getElementById('discovery-grid');
+            grid.innerHTML = items.map(item => `
+                <div class="card" onclick="window.location.href='profile.html?email=${item.email}'" style="cursor: pointer;">
+                    <div class="avatar">${item.firstName[0]}</div>
+                    <div class="info">
+                        <h3>${item.firstName} ${item.lastName}</h3>
+                        ${item.role === 'creator' ? 
+                            `<p>Platform: ${item.platform}</p><p>Followers: ${Number(item.followers).toLocaleString()}</p>` : 
+                            `<p>Company: ${item.companyName}</p><p>Budget: ${item.budget}</p>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('access_token');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

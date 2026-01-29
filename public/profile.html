@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .profile-section {
+            padding: 2rem 0;
+            background-color: #f3f4f6;
+            min-height: calc(100vh - 80px);
+        }
+        .profile-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 2rem;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .profile-info h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .profile-role {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: #dbeafe;
+            color: var(--primary-color);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            text-transform: capitalize;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .detail-item {
+            margin-bottom: 1.5rem;
+        }
+        .detail-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+        .detail-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #111827;
+        }
+        .full-width {
+            grid-column: span 2;
+        }
+        .connect-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: opacity 0.2s;
+        }
+        .connect-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="profile-section">
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="avatar-initials">S</div>
+                    <div class="profile-info">
+                        <h1 id="full-name">Loading...</h1>
+                        <span class="profile-role" id="role-badge">Role</span>
+                        <div id="connect-container"></div>
+                    </div>
+                </div>
+
+                <div class="detail-grid" id="profile-details">
+                    <!-- Dynamic details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userSession = JSON.parse(localStorage.getItem('user'));
+        if (!userSession) {
+            window.location.href = 'login.html';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetEmail = urlParams.get('email') || userSession.email;
+
+        async function fetchProfile() {
+            try {
+                const res = await fetch('/auth/profile', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    },
+                    body: JSON.stringify({ email: targetEmail })
+                });
+                if (res.status === 401) {
+                    logout();
+                    return;
+                }
+                const user = await res.json();
+                
+                if (res.ok) {
+                    displayProfile(user);
+                } else {
+                    alert(user.message);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function displayProfile(user) {
+            document.getElementById('full-name').textContent = `${user.firstName} ${user.lastName}`;
+            document.getElementById('avatar-initials').textContent = user.firstName[0];
+            document.getElementById('role-badge').textContent = user.role;
+
+            // Add Connect Now button if viewing someone else
+            if (user.email !== userSession.email) {
+                document.getElementById('connect-container').innerHTML = `
+                    <a href="mailto:${user.email}?subject=Sponsorship Inquiry from Sponsorly" class="connect-btn">Connect Now</a>
+                `;
+            }
+
+            const grid = document.getElementById('profile-details');
+            let linksHtml = '';
+            if (user.links && user.links.length > 0) {
+                linksHtml = `
+                    <div class="detail-item full-width">
+                        <div class="detail-label">Links</div>
+                        <div class="detail-value">
+                            ${user.links.map(link => `<a href="${link.url}" target="_blank" style="color: var(--primary-color); margin-right: 1.5rem; text-decoration: none;">${link.label} ↗</a>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            let html = `
+                <div class="detail-item">
+                    <div class="detail-label">Email Address</div>
+                    <div class="detail-value">${user.email}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Location</div>
+                    <div class="detail-value">${user.location}</div>
+                </div>
+                <div class="detail-item full-width">
+                    <div class="detail-label">Bio</div>
+                    <div class="detail-value">${user.bio || 'No bio provided.'}</div>
+                </div>
+                ${linksHtml}
+            `;
+
+            if (user.role === 'creator') {
+                html += `
+                    <div class="detail-item">
+                        <div class="detail-label">Platform</div>
+                        <div class="detail-value">${user.platform}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Handle</div>
+                        <div class="detail-value">${user.handle}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Followers</div>
+                        <div class="detail-value">${Number(user.followers).toLocaleString()}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Audience Reach</div>
+                        <div class="detail-value">${user.audienceReach}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Date of Birth</div>
+                        <div class="detail-value">${new Date(user.dob).toLocaleDateString()}</div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="detail-item">
+                        <div class="detail-label">Company Name</div>
+                        <div class="detail-value">${user.companyName}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">${user.noOfEmployees} employees</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Monthly Budget</div>
+                        <div class="detail-value">${user.budget}</div>
+                    </div>
+                    <div class="detail-item full-width">
+                        <div class="detail-label">Collaboration Requirements</div>
+                        <div class="detail-value">${user.requirements || 'None specified.'}</div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('access_token');
+            window.location.href = 'index.html';
+        }
+
+        fetchProfile();
+    </script>
+</body>
+</html>

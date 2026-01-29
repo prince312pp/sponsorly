@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Registration | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="logo"><a href="index.html">Sponsorly</a></div>
+            <h1>Join as Creator</h1>
+            <p>Start landing brand collaborations today.</p>
+            
+            <form id="creator-form">
+                <input type="hidden" name="role" value="creator">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="firstName" required placeholder="John">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="lastName" required placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="john@example.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirmPassword" required placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea name="bio" rows="3" placeholder="Tell us about yourself and your content..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Platform</label>
+                        <select name="platform" required>
+                            <option value="">Select Platform</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Twitter">Twitter/X</option>
+                            <option value="Twitch">Twitch</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Handle (@)</label>
+                        <input type="text" name="handle" required placeholder="@username">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Followers/Subscribers</label>
+                        <input type="number" name="followers" required placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" name="dob" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Audience Reach</label>
+                        <select name="audienceReach" required>
+                            <option value="0-1k">0 - 1k</option>
+                            <option value="1k-10k">1k - 10k</option>
+                            <option value="10k-50k">10k - 50k</option>
+                            <option value="50k-100k">50k - 100k</option>
+                            <option value="100k-500k">100k - 500k</option>
+                            <option value="500k-1M">500k - 1M</option>
+                            <option value="1M-5M">1M - 5M</option>
+                            <option value="5M-10M">5M - 10M</option>
+                            <option value="10M+">10M+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" name="location" required placeholder="City, Country">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; justify-content: space-between; align-items: center;">
+                        Links (Portfolio, Socials, etc.)
+                        <button type="button" id="add-link" class="btn-add-link" title="Add Link">+</button>
+                    </label>
+                    <div id="links-container">
+                        <div class="link-row">
+                            <input type="text" placeholder="Label (e.g. Website)" class="link-label">
+                            <input type="url" placeholder="URL (https://...)" class="link-url">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </form>
+            <p class="auth-footer">Already have an account? <a href="login.html">Sign In</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-link').addEventListener('click', () => {
+            const container = document.getElementById('links-container');
+            const row = document.createElement('div');
+            row.className = 'link-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Label" class="link-label">
+                <input type="url" placeholder="URL" class="link-url">
+                <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(row);
+        });
+
+        document.getElementById('creator-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Collect dynamic links
+            const linkRows = document.querySelectorAll('.link-row');
+            data.links = Array.from(linkRows).map(row => ({
+                label: row.querySelector('.link-label').value,
+                url: row.querySelector('.link-url').value
+            })).filter(link => link.label && link.url);
+
+            try {
+                const res = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('pendingEmail', data.email);
+                    window.location.href = 'verify-otp.html';
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

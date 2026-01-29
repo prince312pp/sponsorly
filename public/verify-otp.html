@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="logo"><a href="index.html">Sponsorly</a></div>
+            <h1>Verify Your Email</h1>
+            <p id="otp-message">We've sent a 6-digit OTP to your email.</p>
+            
+            <form id="otp-form">
+                <div class="form-group">
+                    <label>Enter 6-digit OTP</label>
+                    <input type="text" id="otp" name="otp" required maxlength="6" pattern="\d{6}" placeholder="123456" style="text-align: center; font-size: 1.5rem; letter-spacing: 0.5rem;">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Verify Account</button>
+            </form>
+            <p class="auth-footer">Didn't receive code? <a href="#">Resend OTP</a></p>
+        </div>
+    </div>
+
+    <script>
+        const email = localStorage.getItem('pendingEmail');
+        if (!email) {
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('otp-message').textContent = `We've sent a 6-digit OTP to ${email}`;
+        }
+
+        document.getElementById('otp-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otp = document.getElementById('otp').value;
+            
+            try {
+                const res = await fetch('/auth/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp })
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert('Verification successful! You can now log in.');
+                    localStorage.removeItem('pendingEmail');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

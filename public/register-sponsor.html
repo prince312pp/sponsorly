@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sponsor Registration | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="logo"><a href="index.html">Sponsorly</a></div>
+            <h1>Join as Sponsor</h1>
+            <p>Find the perfect creators for your brand.</p>
+            
+            <form id="sponsor-form">
+                <input type="hidden" name="role" value="sponsor">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="firstName" required placeholder="Jane">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="lastName" required placeholder="Smith">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="jane@company.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" required placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirmPassword" required placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea name="bio" rows="3" placeholder="Tell us about your brand and collaboration goals..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Company Name</label>
+                    <input type="text" name="companyName" required placeholder="Acme Corp">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>No. of Employees</label>
+                        <select name="noOfEmployees" required>
+                            <option value="1-10">1-10</option>
+                            <option value="11-50">11-50</option>
+                            <option value="51-200">51-200</option>
+                            <option value="201-500">201-500</option>
+                            <option value="500+">500+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Budget (INR)</label>
+                        <select name="budget" required>
+                            <option value="<₹50k">< ₹50,000</option>
+                            <option value="₹50k-₹2L">₹50,000 - ₹2,00,000</option>
+                            <option value="₹2L-₹10L">₹2,00,000 - ₹10,00,000</option>
+                            <option value="₹10L+">₹10,00,000+</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Collaboration Requirements</label>
+                    <textarea name="requirements" rows="3" placeholder="What are you looking for in a creator?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="location" required placeholder="City, Country">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; justify-content: space-between; align-items: center;">
+                        Important Links
+                        <button type="button" id="add-link" class="btn-add-link" title="Add Link">+</button>
+                    </label>
+                    <div id="links-container">
+                        <div class="link-row">
+                            <input type="text" placeholder="Label (e.g. Website)" class="link-label">
+                            <input type="url" placeholder="URL (https://...)" class="link-url">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </form>
+            <p class="auth-footer">Already have an account? <a href="login.html">Sign In</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-link').addEventListener('click', () => {
+            const container = document.getElementById('links-container');
+            const row = document.createElement('div');
+            row.className = 'link-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Label" class="link-label">
+                <input type="url" placeholder="URL" class="link-url">
+                <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">×</button>
+            `;
+            container.appendChild(row);
+        });
+
+        document.getElementById('sponsor-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Collect dynamic links
+            const linkRows = document.querySelectorAll('.link-row');
+            data.links = Array.from(linkRows).map(row => ({
+                label: row.querySelector('.link-label').value,
+                url: row.querySelector('.link-url').value
+            })).filter(link => link.label && link.url);
+
+            try {
+                const res = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('pendingEmail', data.email);
+                    window.location.href = 'verify-otp.html';
+                } else {
+                    alert(result.message);
+                }
+            } catch (err) {
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
