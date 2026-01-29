@@ -149,6 +149,91 @@
         [data-theme="dark"] .nav-links a:hover {
             color: var(--primary-color);
         }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+            
+            .dashboard-card {
+                padding: 2rem;
+            }
+            
+            .dashboard-card h1 {
+                font-size: 1.5rem;
+            }
+            
+            .discovery-section {
+                padding: 1rem;
+            }
+            
+            .discovery-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .card {
+                padding: 1rem;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .avatar {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .info h3 {
+                font-size: 1rem;
+            }
+            
+            .info p {
+                font-size: 0.8rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .navbar .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .dashboard-container {
+                padding: 0.5rem;
+            }
+            
+            .dashboard-card {
+                padding: 1.5rem;
+            }
+            
+            .dashboard-card h1 {
+                font-size: 1.25rem;
+            }
+            
+            .card {
+                padding: 0.75rem;
+            }
+            
+            .avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
