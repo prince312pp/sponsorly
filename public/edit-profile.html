@@ -228,13 +228,6 @@
     </style>
 </head>
 <body>
-    <div class="fixed-theme-toggle">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 1 21 12.79z"></path>
-            </svg>
-        </button>
-    </div>
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
@@ -517,48 +510,6 @@
         }
 
         fetchProfile();
-    </script>
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('svg');
-        
-        // Check for saved theme preference or respect OS setting
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        // Set initial theme
-        if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            updateThemeIcon('sun'); // Show sun icon when in dark mode
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-            updateThemeIcon('bulb'); // Show bulb icon when in light mode
-        }
-        
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            
-            if (currentTheme === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-                updateThemeIcon('moon');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                updateThemeIcon('sun');
-            }
-        });
-        
-        function updateThemeIcon(theme) {
-            if (theme === 'sun') {
-                themeIcon.innerHTML = `<path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M4.22 4.22l1.42 1.42"></path><path d="M18.36 18.36l1.42 1.42"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="M4.22 19.78l1.42-1.42"></path><path d="M18.36 5.64l1.42-1.42"></path>`;
-            } else if (theme === 'bulb') {
-                themeIcon.innerHTML = `<path d="M9 18h6m-3-12a9 9 0 1 1-9 9 9 9 0 0 1 9-9z"></path><path d="M12 12v3"></path><path d="M12 15h.01"></path>`;
-            } else {
-                themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 1 21 12.79z"></path>`;
-            }
-        }
     </script>
 </body>
 </html>
