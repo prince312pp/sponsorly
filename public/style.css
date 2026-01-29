@@ -632,23 +632,129 @@ body {
         padding: 0 0.75rem;
     }
     
+    /* Hero */
+    .hero {
+        padding: 2rem 0;
+    }
+    
     .hero h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .sub-headline {
+        font-size: 0.9rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .btn {
+        padding: 0.7rem 0.9rem;
+        font-size: 0.95rem;
+    }
+    
+    /* Sections */
+    .how-it-works, .why-exists, .categories, .features {
+        padding: 2rem 0;
+    }
+    
+    .how-it-works h2, .categories h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .how-column {
+        padding: 1rem;
+    }
+    
+    .how-column h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .how-column li {
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .problem h3, .solution h3 {
+        font-size: 1.1rem;
+    }
+    
+    .problem p, .solution p {
+        font-size: 0.85rem;
     }
     
     .category-grid {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .category-card {
+        padding: 0.7rem;
+        min-height: 70px;
+        font-size: 0.85rem;
     }
     
     .feature-grid {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
     }
     
-    .how-column h3 {
-        font-size: 1.2rem;
+    .feature-card {
+        padding: 0.8rem 0.6rem;
+        min-height: 80px;
     }
     
-    .how-column li {
+    .feature-card h4 {
+        font-size: 0.9rem;
+    }
+    
+    .feature-card p {
+        font-size: 0.75rem;
+    }
+    
+    .final-cta {
+        padding: 2.5rem 0;
+    }
+    
+    .final-cta h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.65rem 0.8rem;
+    }
+    
+    /* Trust Strip */
+    .trust-strip p {
+        font-size: 0.8rem;
+    }
+    
+    .trust-items {
+        font-size: 0.75rem;
+    }
+    
+    /* Footer */
+    .footer-links, .footer-socials {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .footer a {
+        font-size: 0.85rem;
+    }
+    
+    /* Theme Toggle */
+    .fixed-theme-toggle {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .theme-toggle {
+        width: 32px;
+        height: 32px;
         font-size: 0.9rem;
     }
 }
