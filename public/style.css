@@ -53,9 +53,29 @@ body {
     align-items: center;
 }
 
-/* For navbar specifically, we want logo on left, nav-links centered, auth on right */
+/* For navbar specifically - logo left, nav centered, auth right */
 .navbar .container {
     justify-content: space-between;
+}
+
+/* Ensure proper spacing between navbar elements */
+.navbar .logo {
+    flex-shrink: 0;
+}
+
+.navbar .nav-links {
+    flex: 1;
+    justify-content: center;
+    margin: 0 2rem;
+}
+
+.navbar .nav-auth {
+    flex-shrink: 0;
+    margin-right: 1rem;
+}
+
+.navbar .hamburger {
+    flex-shrink: 0;
 }
 
 .logo {
