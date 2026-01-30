@@ -32,7 +32,10 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Put('update-profile')
   async updateProfile(@Body() updateData: any) {
-    return this.authService.updateProfile(updateData);
+    // Extract email from the request object (available via JWT guard)
+    // For now, we'll extract email from the request body as well
+    const { email, ...updates } = updateData;
+    return this.authService.updateProfile(email, updates);
   }
 
   @UseGuards(JwtAuthGuard)

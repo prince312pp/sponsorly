@@ -28,6 +28,9 @@ export class User {
 
   @Prop()
   otpExpires: Date;
+  
+  @Prop()
+  lastOtpRequest: Date;
 
   @Prop()
   bio: string;

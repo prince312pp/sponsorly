@@ -1,10 +1,16 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
+
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -18,206 +24,289 @@ export class AuthService {
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {
-    const emailUser = this.configService.get<string>('EMAIL_USER')?.trim();
-    const emailPass = this.configService.get<string>('EMAIL_PASS')?.trim();
-
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: emailUser,
-        pass: emailPass,
+        user: this.configService.get<string>('EMAIL_USER')?.trim(),
+        pass: this.configService.get<string>('EMAIL_PASS')?.trim(),
       },
+    });
+
+    this.transporter.verify().then(() => {
+      console.log('📧 Email transporter ready');
     });
   }
 
+  /* -------------------------------- REGISTER -------------------------------- */
+
   async register(data: RegisterDto) {
-    const { email, password, confirmPassword } = data;
+    const { email, password, confirmPassword, firstName, lastName, role } = data;
+
+    // Validate input data
+    if (!email || !password || !firstName || !lastName || !role) {
+      throw new BadRequestException('Missing required fields');
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new BadRequestException('Invalid email format');
+    }
+
+    // Validate password strength
+    if (password.length < 6) {
+      throw new BadRequestException('Password must be at least 6 characters long');
+    }
 
     if (password !== confirmPassword) {
       throw new BadRequestException('Passwords do not match');
     }
 
-    const userExists = await this.userModel.findOne({ email });
-    if (userExists) {
+    // Check if user already exists
+    const existingUser = await this.userModel.findOne({ email });
+    if (existingUser) {
       throw new BadRequestException('User already exists');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
+    const otp = this.generateOtp();
+    const hashedOtp = await bcrypt.hash(otp, 10);
 
-    const newUser = new this.userModel({
+    const user = await this.userModel.create({
       ...data,
       password: hashedPassword,
-      otp,
-      otpExpires,
+      otp: hashedOtp,
+      otpExpires: new Date(Date.now() + 10 * 60 * 1000),
       verified: false,
     });
 
-    await newUser.save();
+    await this.sendOtpEmail(email, otp);
 
-    // Send Real Email
-    try {
-      const emailUser = this.configService.get<string>('EMAIL_USER')?.trim();
-      const info = await this.transporter.sendMail({
-        from: `"Sponsorly" <${emailUser}>`,
-        to: email,
-        subject: 'Sponsorly - Verify Your Email',
-        text: `Your OTP for Sponsorly registration is: ${otp}. It expires in 10 minutes.`,
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #2563eb; text-align: center;">Welcome to Sponsorly!</h2>
-            <p>Thank you for signing up. Please use the following One-Time Password (OTP) to verify your account:</p>
-            <div style="background: #f3f4f6; padding: 15px; text-align: center; font-size: 2rem; font-weight: bold; letter-spacing: 5px; margin: 20px 0; border-radius: 8px;">
-              ${otp}
-            </div>
-            <p>This OTP will expire in <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 0.8rem; color: #6b7280; text-align: center;">&copy; 2026 Sponsorly. All rights reserved.</p>
-          </div>
-        `,
-      });
-      console.log('Email sent successfully:', info.messageId);
-    } catch (error) {
-      console.error('Email sending failed error details:', error);
-    }
-
-    console.log(`OTP for ${email}: ${otp}`);
-
-    return { message: 'OTP sent to your email', email };
+    // Return only necessary information, exclude sensitive data
+    return { 
+      message: 'OTP sent to your email', 
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
   }
 
-  async verifyOtp(email: string, otp: string) {
-    const user = await this.userModel.findOne({
-      email,
-      otp,
-      otpExpires: { $gt: new Date() },
-    });
+  /* -------------------------------- VERIFY OTP -------------------------------- */
 
-    if (!user) {
+  async verifyOtp(email: string, otp: string) {
+    if (!email || !otp) {
+      throw new BadRequestException('Email and OTP are required');
+    }
+
+    const user = await this.userModel.findOne({ email });
+
+    if (
+      !user ||
+      !user.otp ||
+      !user.otpExpires ||
+      user.otpExpires < new Date()
+    ) {
       throw new BadRequestException('Invalid or expired OTP');
     }
 
+    const validOtp = await bcrypt.compare(otp, user.otp);
+    if (!validOtp) {
+      throw new BadRequestException('Invalid OTP');
+    }
+
     user.verified = true;
-    (user as any).otp = undefined;
-    (user as any).otpExpires = undefined;
+    user.set('otp', undefined);
+    user.set('otpExpires', undefined);
     await user.save();
 
     return { message: 'Account verified successfully' };
   }
 
-  async getProfile(email: string) {
-    const user = await this.userModel.findOne({ email }).select('-password -otp -otpExpires');
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
-    return user;
-  }
-
-  async updateProfile(updateData: any) {
-    const { email, ...updates } = updateData;
-    
-    // Remove email from updates since it's used as identifier
-    delete updates.email;
-    
-    const user = await this.userModel.findOneAndUpdate(
-      { email },
-      { $set: updates },
-      { new: true, runValidators: true }
-    );
-    
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
-    
-    return { message: 'Profile updated successfully', user };
-  }
-
-  async discover(role: string) {
-    // If sponsor, see creators. If creator, see sponsors.
-    const targetRole = role === 'sponsor' ? 'creator' : 'sponsor';
-    return this.userModel.find({ role: targetRole, verified: true }).select('firstName lastName email platform followers budget companyName role');
-  }
-
-  async discoverSame(role: string, email: string) {
-    return this.userModel.find({ 
-      role: role, 
-      verified: true,
-      email: { $ne: email } 
-    }).select('firstName lastName email platform followers budget companyName role');
-  }
+  /* -------------------------------- LOGIN -------------------------------- */
 
   async login(data: LoginDto) {
     const { email, password } = data;
-    const user = await this.userModel.findOne({ email });
+
+    if (!email || !password) {
+      throw new BadRequestException('Email and password are required');
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new BadRequestException('Invalid email format');
+    }
+
+    const user = await this.userModel
+      .findOne({ email })
+      .select('+password');
 
     if (!user) {
       throw new BadRequestException('Invalid credentials');
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!(await bcrypt.compare(password, user.password))) {
       throw new BadRequestException('Invalid credentials');
     }
 
     if (!user.verified) {
-      // Resend OTP
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
-      
-      user.otp = otp;
-      user.otpExpires = otpExpires;
-      await user.save();
-
-      await this.sendOtpEmail(email, otp);
-
-      return { 
-        message: 'Account not verified. A new OTP has been sent to your email.', 
+      await this.resendOtp(user);
+      return {
         verified: false,
-        email 
+        message: 'Account not verified. OTP resent.',
+        email,
       };
     }
 
-    const payload = { sub: user._id, email: user.email, role: user.role };
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(
+      { sub: user._id, email: user.email, role: user.role },
+      { expiresIn: '1d' },
+    );
 
-    return { 
-      message: 'Login successful', 
+    return {
       verified: true,
       access_token: token,
       user: {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        role: user.role
-      }
+        role: user.role,
+      },
     };
   }
 
-  private async sendOtpEmail(email: string, otp: string) {
-    try {
-      const emailUser = this.configService.get<string>('EMAIL_USER')?.trim();
-      await this.transporter.sendMail({
-        from: `"Sponsorly" <${emailUser}>`,
-        to: email,
-        subject: 'Sponsorly - Verify Your Email',
-        text: `Your OTP for Sponsorly registration is: ${otp}. It expires in 10 minutes.`,
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #2563eb; text-align: center;">Welcome to Sponsorly!</h2>
-            <p>Please use the following One-Time Password (OTP) to verify your account:</p>
-            <div style="background: #f3f4f6; padding: 15px; text-align: center; font-size: 2rem; font-weight: bold; letter-spacing: 5px; margin: 20px 0; border-radius: 8px;">
-              ${otp}
-            </div>
-            <p>This OTP will expire in <strong>10 minutes</strong>. If you did not request this, please ignore this email.</p>
-            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="font-size: 0.8rem; color: #6b7280; text-align: center;">&copy; 2026 Sponsorly. All rights reserved.</p>
-          </div>
-        `,
-      });
-      console.log(`OTP sent to ${email}: ${otp}`);
-    } catch (error) {
-      console.error('Email sending failed error details:', error);
+  /* -------------------------------- PROFILE -------------------------------- */
+
+  async getProfile(email: string) {
+    if (!email) {
+      throw new BadRequestException('Email is required');
     }
+
+    const user = await this.userModel
+      .findOne({ email })
+      .select('-password -otp -otpExpires');
+
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async updateProfile(email: string, updates: any) {
+    if (!email) {
+      throw new BadRequestException('Email is required');
+    }
+
+    const allowedFields = [
+      'firstName',
+      'lastName',
+      'bio',
+      'location',
+      'links',
+      'platform',
+      'handle',
+      'followers',
+      'audienceReach',
+      'dob',
+      'companyName',
+      'noOfEmployees',
+      'budget',
+      'requirements',
+    ];
+
+    // Filter updates to only allow safe fields
+    const safeUpdates = {};
+    for (const [key, value] of Object.entries(updates)) {
+      if (allowedFields.includes(key)) {
+        safeUpdates[key] = value;
+      }
+    }
+
+    const user = await this.userModel.findOneAndUpdate(
+      { email },
+      { $set: safeUpdates },
+      { new: true, runValidators: true },
+    );
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return { message: 'Profile updated successfully', user };
+  }
+
+  /* -------------------------------- DISCOVER -------------------------------- */
+
+  async discover(role: string) {
+    if (!role) {
+      throw new BadRequestException('Role is required');
+    }
+    
+    const targetRole = role === 'sponsor' ? 'creator' : 'sponsor';
+    return this.userModel
+      .find({ role: targetRole, verified: true })
+      .select('firstName lastName email platform followers budget companyName role bio location')
+      .limit(20); // Limit results to prevent excessive data transfer
+  }
+
+  async discoverSame(role: string, email: string) {
+    if (!role || !email) {
+      throw new BadRequestException('Role and email are required');
+    }
+    
+    return this.userModel
+      .find({ role, verified: true, email: { $ne: email } })
+      .select('firstName lastName email platform followers budget companyName role bio location')
+      .limit(20); // Limit results to prevent excessive data transfer
+  }
+
+  /* -------------------------------- HELPERS -------------------------------- */
+
+  private generateOtp(): string {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  private async resendOtp(user: UserDocument) {
+    // Simple rate limiting using a separate field to track last OTP request time
+    const now = Date.now();
+    // Check if there was a previous OTP request
+    const lastOtpRequest = user.lastOtpRequest ? user.lastOtpRequest.getTime() : 0;
+    
+    if (now - lastOtpRequest < 60_000) { // 1 minute
+      throw new ForbiddenException(
+        'Please wait before requesting another OTP',
+      );
+    }
+
+    const otp = this.generateOtp();
+    user.set('otp', await bcrypt.hash(otp, 10));
+    user.set('otpExpires', new Date(now + 10 * 60 * 1000));
+    user.set('lastOtpRequest', new Date(now)); // Track when OTP was last requested
+    await user.save();
+
+    await this.sendOtpEmail(user.email, otp);
+  }
+
+  private async sendOtpEmail(email: string, otp: string) {
+    if (!email || !otp) {
+      throw new BadRequestException('Email and OTP are required');
+    }
+
+    const from = this.configService.get<string>('EMAIL_USER');
+
+    await this.transporter.sendMail({
+      from: `"Sponsorly" <${from}>`,
+      to: email,
+      subject: 'Verify your Sponsorly account',
+      html: `
+        <div style="font-family:Arial;max-width:600px;margin:auto;padding:20px;">
+          <h2 style="text-align:center;color:#d20f39">Sponsorly Verification</h2>
+          <p>Hello,</p>
+          <p>Your verification code is:</p>
+          <div style="font-size:32px;font-weight:bold;text-align:center;background:#f8f9fa;padding:15px;border-radius:8px;margin:20px 0;">${otp}</div>
+          <p>Please enter this code in the app to verify your account.</p>
+          <p><strong>Note:</strong> This code expires in 10 minutes.</p>
+          <hr style="margin:30px 0;" />
+          <p style="font-size:0.8em;color:#6c757d;">If you didn't request this verification, please ignore this email.</p>
+        </div>
+      `,
+    });
   }
 }
