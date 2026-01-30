@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Verify Email | Sponsorly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email | Sponsorly</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="fixed-theme-toggle">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 1 21 12.79z"></path>
-            </svg>
-        </button>
-    </div>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <div class="nav-auth">
+                <a href="#" class="btn-signin" onclick="window.location.href='login.html'">Sign In</a>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    
     <div class="auth-container">
         <div class="auth-card">
             <div class="logo"><a href="index.html">Sponsorly</a></div>
@@ -34,6 +41,33 @@
         </div>
     </div>
 
+    <script>
+        // Hamburger menu functionality
+        const hamburger = document.getElementById('hamburger');
+        
+        if (hamburger) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                window.location.href = 'index.html';
+            });
+        }
+        
+        // Handle authenticated user
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            const navAuth = document.querySelector('.nav-auth');
+            if (navAuth) {
+                navAuth.innerHTML = `
+                    <a href="profile.html" class="profile-icon" title="My Profile">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                `;
+            }
+        }
+    </script>
     <script>
         const email = localStorage.getItem('pendingEmail');
         if (!email) {
@@ -64,11 +98,6 @@
                 alert('Something went wrong. Please try again.');
             }
         });
-    </script>
-    <script>
-        // Theme toggle functionality
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('svg');
     </script>
 </body>
 </html>

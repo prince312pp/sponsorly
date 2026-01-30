@@ -1,10 +1,11 @@
 .auth-container {
-    min-height: 100vh;
+    min-height: calc(100vh - 60px); /* Adjust for navbar height */
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--dark-bg);
     padding: 2rem;
+    padding-top: 4rem; /* Extra padding to account for navbar */
 }
 
 .auth-card {
@@ -176,9 +177,10 @@ form {
 @media (max-width: 768px) {
     .auth-container {
         padding: 0.75rem;
-        min-height: 100vh;
+        min-height: calc(100vh - 60px); /* Adjust for navbar height */
+        padding-top: 6rem; /* More padding on mobile for navbar */
         display: flex;
-        align-items: center;
+        align-items: flex-start; /* Align to top to account for navbar */
     }
     
     .auth-card {
@@ -245,6 +247,7 @@ form {
 @media (max-width: 480px) {
     .auth-container {
         padding: 0.5rem;
+        padding-top: 5rem; /* Adjust padding for small screens */
     }
     
     .auth-card {

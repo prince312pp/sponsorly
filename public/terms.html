@@ -12,6 +12,9 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <div class="nav-auth">
+                <a href="#" class="btn-signin" onclick="window.location.href='login.html'">Sign In</a>
+            </div>
             <button class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
@@ -80,6 +83,22 @@
                 hamburger.classList.toggle('active');
                 window.location.href = 'index.html';
             });
+        }
+        
+        // Handle authenticated user
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            const navAuth = document.querySelector('.nav-auth');
+            if (navAuth) {
+                navAuth.innerHTML = `
+                    <a href="profile.html" class="profile-icon" title="My Profile">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                `;
+            }
         }
     </script>
 </body>
