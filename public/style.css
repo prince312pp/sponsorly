@@ -48,15 +48,15 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+}
+
+.navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* For navbar specifically - logo left, nav centered, auth right */
-.navbar .container {
-    justify-content: space-between;
-}
+
 
 /* Ensure proper spacing between navbar elements */
 .navbar .logo {
@@ -173,6 +173,12 @@ body {
 }
 
 /* Hero */
+.hero .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
 .hero {
     padding: 6rem 0;
     text-align: center;
