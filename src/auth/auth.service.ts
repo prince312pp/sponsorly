@@ -32,27 +32,29 @@ export class AuthService {
 
   private initializeTransporter() {
     try {
-      const emailUser = this.configService.get<string>('EMAIL_USER')?.trim();
-      const emailPass = this.configService.get<string>('EMAIL_PASS')?.trim();
+      const sendgridApiKey = this.configService.get<string>('SENDGRID_API_KEY')?.trim();
 
-      // Use Gmail as primary email service
-      if (emailUser && emailPass) {
-        this.logger.log('Initializing Gmail transporter');
+      // Use SendGrid as the only email service
+      if (sendgridApiKey) {
+        this.logger.log('Initializing SendGrid transporter');
         this.transporter = nodemailer.createTransport({
-          service: 'gmail',
+          host: 'smtp.sendgrid.net',
+          port: 587,
+          secure: false,
           auth: {
-            user: emailUser,
-            pass: emailPass,
+            user: 'apikey',
+            pass: sendgridApiKey,
           },
           tls: {
             rejectUnauthorized: false
           },
         });
-        this.emailProvider = 'gmail';
+        this.emailProvider = 'sendgrid';
       }
       // No email service configured
       else {
-        this.logger.warn('No email service configured');
+        this.logger.warn('No SendGrid API key configured - email service disabled');
+        this.emailProvider = 'console';
         return;
       }
 
