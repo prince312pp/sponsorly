@@ -69,10 +69,10 @@
                     <div class="form-group">
                         <label>Monthly Budget (INR)</label>
                         <select name="budget" required>
-                            <option value="<â‚¹50k">< â‚¹50,000</option>
-                            <option value="â‚¹50k-â‚¹2L">â‚¹50,000 - â‚¹2,00,000</option>
-                            <option value="â‚¹2L-â‚¹10L">â‚¹2,00,000 - â‚¹10,00,000</option>
-                            <option value="â‚¹10L+">â‚¹10,00,000+</option>
+                            <option value="₹50k">₹50,000</option>
+                            <option value="₹50k-₹2L">₹50,000 - ₹2,00,000</option>
+                            <option value="₹2L-₹10L">₹2,00,000 - ₹10,00,000</option>
+                            <option value="₹10L+">₹10,00,000+</option>
                         </select>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
             row.innerHTML = `
                 <input type="text" placeholder="Label" class="link-label">
                 <input type="url" placeholder="URL" class="link-url">
-                <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">Ã—</button>
+                <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">&times;</button>
             `;
             container.appendChild(row);
         });

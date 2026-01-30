@@ -110,6 +110,7 @@
                         <div class="link-row">
                             <input type="text" placeholder="Label (e.g. Website)" class="link-label">
                             <input type="url" placeholder="URL (https://...)" class="link-url">
+                            <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">&times;</button>
                         </div>
                     </div>
                 </div>
@@ -128,7 +129,7 @@
             row.innerHTML = `
                 <input type="text" placeholder="Label" class="link-label">
                 <input type="url" placeholder="URL" class="link-url">
-                <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">Ã—</button>
+                <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">&times;</button>
             `;
             container.appendChild(row);
         });

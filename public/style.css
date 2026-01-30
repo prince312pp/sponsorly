@@ -321,9 +321,9 @@ body {
     color: var(--primary-color);
 }
 
-/* NOTE â€” PUSH TO BOTTOM */
+/* NOTE — PUSH TO BOTTOM */
 .note {
-    margin-top: auto; /* ðŸ”¥ THIS IS THE MAGIC */
+    margin-top: auto; 
     padding-top: 1.5rem;
     font-size: 0.875rem;
     color: var(--secondary-color);
