@@ -50,9 +50,9 @@ export class AuthService {
         });
         this.emailProvider = 'gmail';
       }
-      // Fallback to console logging if no email service configured
+      // No email service configured
       else {
-        console.log('No email service configured - using console logging');
+        this.logger.warn('No email service configured');
         return;
       }
 
@@ -128,8 +128,6 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
-      // Include OTP in response for development/testing
-      ...(process.env.NODE_ENV !== 'production' && { otp }),
     };
   }
 
@@ -200,10 +198,6 @@ export class AuthService {
         verified: false,
         message: 'Account not verified. OTP has been resent to your email.',
         email,
-        // Include OTP in response for development/testing
-        ...(process.env.NODE_ENV !== 'production' && { 
-          otp: await this.getUnhashedOtp(user.email) 
-        }),
       };
     }
 
@@ -311,24 +305,6 @@ export class AuthService {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
-  // Helper method to get unhashed OTP for development
-  private async getUnhashedOtp(email: string): Promise<string | null> {
-    if (process.env.NODE_ENV === 'production') return null;
-    
-    const user = await this.userModel.findOne({ email });
-    if (!user || !user.otp) return null;
-    
-    // This is only for development - in production, OTP should never be exposed
-    const otpRegex = /\$(2[ayb]\$[0-9]{2}\$[A-Za-z0-9./]{53})/;
-    const match = user.otp.match(otpRegex);
-    if (match) {
-      // In a real scenario, you'd store the plain OTP temporarily
-      // For now, we'll generate a predictable test OTP
-      return '123456';
-    }
-    return null;
-  }
-
   private async resendOtp(user: UserDocument) {
     // Simple rate limiting using a separate field to track last OTP request time
     const now = Date.now();
@@ -354,11 +330,6 @@ export class AuthService {
   private async sendOtpEmail(email: string, otp: string) {
     if (!email || !otp) {
       throw new BadRequestException('Email and OTP are required');
-    }
-
-    // For development/testing, log OTP to console
-    if (process.env.NODE_ENV !== 'production') {
-      this.logger.log(`🔧 DEVELOPMENT MODE - OTP for ${email}: ${otp}`);
     }
 
     // If no email service is configured, log to console
