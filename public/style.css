@@ -315,7 +315,7 @@ body {
 }
 
 .how-column li::before {
-    content: "â†’";
+    content: "-";
     position: absolute;
     left: 0;
     color: var(--primary-color);
