@@ -3,6 +3,7 @@ import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
+  Logger,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
@@ -18,23 +19,51 @@ import { LoginDto } from './dto/login.dto';
 @Injectable()
 export class AuthService {
   private transporter: nodemailer.Transporter;
+  private logger = new Logger(AuthService.name);
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) {
-    this.transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: this.configService.get<string>('EMAIL_USER')?.trim(),
-        pass: this.configService.get<string>('EMAIL_PASS')?.trim(),
-      },
-    });
+    this.initializeTransporter();
+  }
 
-    this.transporter.verify().then(() => {
-      console.log('📧 Email transporter ready');
-    });
+  private initializeTransporter() {
+    try {
+      const emailUser = this.configService.get<string>('EMAIL_USER')?.trim();
+      const emailPass = this.configService.get<string>('EMAIL_PASS')?.trim();
+
+      if (!emailUser || !emailPass) {
+        this.logger.warn('Email credentials not configured - email sending disabled');
+        return;
+      }
+
+      this.transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+        tls: {
+          rejectUnauthorized: false
+        },
+        connectionTimeout: 30000, // 30 seconds
+        greetingTimeout: 30000,
+        socketTimeout: 30000,
+      });
+
+      // Verify connection
+      this.transporter.verify((error, success) => {
+        if (error) {
+          this.logger.error('Email transporter verification failed:', error.message);
+        } else {
+          this.logger.log('📧 Email transporter ready');
+        }
+      });
+    } catch (error) {
+      this.logger.error('Failed to initialize email transporter:', error.message);
+    }
   }
 
   /* -------------------------------- REGISTER -------------------------------- */
@@ -80,11 +109,14 @@ export class AuthService {
       verified: false,
     });
 
-    await this.sendOtpEmail(email, otp);
+    // Send OTP email (non-blocking)
+    this.sendOtpEmail(email, otp).catch(error => {
+      this.logger.error(`Failed to send OTP email to ${email}:`, error.message);
+    });
 
     // Return only necessary information, exclude sensitive data
     return { 
-      message: 'OTP sent to your email', 
+      message: 'Registration successful. Please check your email for OTP.', 
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -151,10 +183,13 @@ export class AuthService {
     }
 
     if (!user.verified) {
-      await this.resendOtp(user);
+      // Resend OTP (non-blocking)
+      this.resendOtp(user).catch(error => {
+        this.logger.error(`Failed to resend OTP to ${user.email}:`, error.message);
+      });
       return {
         verified: false,
-        message: 'Account not verified. OTP resent.',
+        message: 'Account not verified. OTP has been resent to your email.',
         email,
       };
     }
@@ -281,6 +316,7 @@ export class AuthService {
     user.set('lastOtpRequest', new Date(now)); // Track when OTP was last requested
     await user.save();
 
+    // Send OTP email (non-blocking)
     await this.sendOtpEmail(user.email, otp);
   }
 
@@ -289,24 +325,37 @@ export class AuthService {
       throw new BadRequestException('Email and OTP are required');
     }
 
+    // Check if transporter is initialized
+    if (!this.transporter) {
+      this.logger.warn('Email transporter not initialized - skipping email send');
+      return;
+    }
+
     const from = this.configService.get<string>('EMAIL_USER');
 
-    await this.transporter.sendMail({
-      from: `"Sponsorly" <${from}>`,
-      to: email,
-      subject: 'Verify your Sponsorly account',
-      html: `
-        <div style="font-family:Arial;max-width:600px;margin:auto;padding:20px;">
-          <h2 style="text-align:center;color:#d20f39">Sponsorly Verification</h2>
-          <p>Hello,</p>
-          <p>Your verification code is:</p>
-          <div style="font-size:32px;font-weight:bold;text-align:center;background:#f8f9fa;padding:15px;border-radius:8px;margin:20px 0;">${otp}</div>
-          <p>Please enter this code in the app to verify your account.</p>
-          <p><strong>Note:</strong> This code expires in 10 minutes.</p>
-          <hr style="margin:30px 0;" />
-          <p style="font-size:0.8em;color:#6c757d;">If you didn't request this verification, please ignore this email.</p>
-        </div>
-      `,
-    });
+    try {
+      await this.transporter.sendMail({
+        from: `"Sponsorly" <${from}>`,
+        to: email,
+        subject: 'Verify your Sponsorly account',
+        html: `
+          <div style="font-family:Arial;max-width:600px;margin:auto;padding:20px;">
+            <h2 style="text-align:center;color:#d20f39">Sponsorly Verification</h2>
+            <p>Hello,</p>
+            <p>Your verification code is:</p>
+            <div style="font-size:32px;font-weight:bold;text-align:center;background:#f8f9fa;padding:15px;border-radius:8px;margin:20px 0;">${otp}</div>
+            <p>Please enter this code in the app to verify your account.</p>
+            <p><strong>Note:</strong> This code expires in 10 minutes.</p>
+            <hr style="margin:30px 0;" />
+            <p style="font-size:0.8em;color:#6c757d;">If you didn't request this verification, please ignore this email.</p>
+          </div>
+        `,
+      });
+      this.logger.log(`OTP email sent successfully to ${email}`);
+    } catch (error) {
+      this.logger.error(`Failed to send OTP email to ${email}:`, error.message);
+      // Don't throw error - let the registration/login continue
+      // The user can request OTP again if needed
+    }
   }
 }
