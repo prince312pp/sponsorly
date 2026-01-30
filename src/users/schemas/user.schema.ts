@@ -20,17 +20,8 @@ export class User {
   @Prop({ required: true, enum: ['creator', 'sponsor'] })
   role: string;
 
-  @Prop({ default: false })
+  @Prop({ default: true })
   verified: boolean;
-
-  @Prop()
-  otp: string;
-
-  @Prop()
-  otpExpires: Date;
-  
-  @Prop()
-  lastOtpRequest: Date;
 
   @Prop()
   bio: string;

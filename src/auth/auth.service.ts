@@ -1,7 +1,6 @@
 import {
   Injectable,
   BadRequestException,
-  ForbiddenException,
   NotFoundException,
   Logger,
 } from '@nestjs/common';
@@ -10,7 +9,6 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
-import * as nodemailer from 'nodemailer';
 
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { RegisterDto } from './dto/register.dto';
@@ -18,62 +16,13 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  private transporter: nodemailer.Transporter;
   private logger = new Logger(AuthService.name);
-  private emailProvider: 'gmail' | 'sendgrid' | 'console' = 'gmail';
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private configService: ConfigService,
     private jwtService: JwtService,
-  ) {
-    this.initializeTransporter();
-  }
-
-  private initializeTransporter() {
-    try {
-      const sendgridApiKey = this.configService.get<string>('SENDGRID_API_KEY')?.trim();
-
-      // Use SendGrid as the only email service
-      if (sendgridApiKey) {
-        this.logger.log('Initializing SendGrid transporter');
-        this.transporter = nodemailer.createTransport({
-          host: 'smtp.sendgrid.net',
-          port: 587,
-          secure: false,
-          auth: {
-            user: 'apikey',
-            pass: sendgridApiKey,
-          },
-          tls: {
-            rejectUnauthorized: false
-          },
-        });
-        this.emailProvider = 'sendgrid';
-      }
-      // No email service configured
-      else {
-        this.logger.warn('No SendGrid API key configured - email service disabled');
-        this.emailProvider = 'console';
-        return;
-      }
-
-      // Verify connection with timeout
-      this.transporter.verify((error, success) => {
-        if (error) {
-          this.logger.error(`Email transporter verification failed with ${this.emailProvider}:`, error.message);
-          // Fallback to console logging on verification failure
-          this.emailProvider = 'console';
-          this.logger.warn('Email service unavailable - falling back to console logging');
-        } else {
-          this.logger.log(`📧 Email transporter ready (${this.emailProvider})`);
-        }
-      });
-    } catch (error) {
-      this.logger.error('Failed to initialize email transporter:', error.message);
-      this.emailProvider = 'console';
-    }
-  }
+  ) {}
 
   /* -------------------------------- REGISTER -------------------------------- */
 
@@ -107,61 +56,20 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const otp = this.generateOtp();
-    const hashedOtp = await bcrypt.hash(otp, 10);
 
     const user = await this.userModel.create({
       ...data,
       password: hashedPassword,
-      otp: hashedOtp,
-      otpExpires: new Date(Date.now() + 10 * 60 * 1000),
-      verified: false,
+      verified: true, // Auto-verify users
     });
 
-    // Send OTP email (non-blocking)
-    this.sendOtpEmail(email, otp).catch(error => {
-      this.logger.error(`Failed to send OTP email to ${email}:`, error.message);
-    });
-
-    // Return only necessary information, exclude sensitive data
     return { 
-      message: 'Registration successful. Please check your email for OTP.', 
+      message: 'Registration successful.', 
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
     };
-  }
-
-  /* -------------------------------- VERIFY OTP -------------------------------- */
-
-  async verifyOtp(email: string, otp: string) {
-    if (!email || !otp) {
-      throw new BadRequestException('Email and OTP are required');
-    }
-
-    const user = await this.userModel.findOne({ email });
-
-    if (
-      !user ||
-      !user.otp ||
-      !user.otpExpires ||
-      user.otpExpires < new Date()
-    ) {
-      throw new BadRequestException('Invalid or expired OTP');
-    }
-
-    const validOtp = await bcrypt.compare(otp, user.otp);
-    if (!validOtp) {
-      throw new BadRequestException('Invalid OTP');
-    }
-
-    user.verified = true;
-    user.set('otp', undefined);
-    user.set('otpExpires', undefined);
-    await user.save();
-
-    return { message: 'Account verified successfully' };
   }
 
   /* -------------------------------- LOGIN -------------------------------- */
@@ -191,18 +99,6 @@ export class AuthService {
       throw new BadRequestException('Invalid credentials');
     }
 
-    if (!user.verified) {
-      // Resend OTP (non-blocking)
-      this.resendOtp(user).catch(error => {
-        this.logger.error(`Failed to resend OTP to ${user.email}:`, error.message);
-      });
-      return {
-        verified: false,
-        message: 'Account not verified. OTP has been resent to your email.',
-        email,
-      };
-    }
-
     const token = this.jwtService.sign(
       { sub: user._id, email: user.email, role: user.role },
       { expiresIn: '1d' },
@@ -229,7 +125,7 @@ export class AuthService {
 
     const user = await this.userModel
       .findOne({ email })
-      .select('-password -otp -otpExpires');
+      .select('-password');
 
     if (!user) throw new NotFoundException('User not found');
     return user;
@@ -287,7 +183,7 @@ export class AuthService {
     return this.userModel
       .find({ role: targetRole, verified: true })
       .select('firstName lastName email platform followers budget companyName role bio location')
-      .limit(20); // Limit results to prevent excessive data transfer
+      .limit(20);
   }
 
   async discoverSame(role: string, email: string) {
@@ -298,75 +194,6 @@ export class AuthService {
     return this.userModel
       .find({ role, verified: true, email: { $ne: email } })
       .select('firstName lastName email platform followers budget companyName role bio location')
-      .limit(20); // Limit results to prevent excessive data transfer
-  }
-
-  /* -------------------------------- HELPERS -------------------------------- */
-
-  private generateOtp(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-
-  private async resendOtp(user: UserDocument) {
-    // Simple rate limiting using a separate field to track last OTP request time
-    const now = Date.now();
-    // Check if there was a previous OTP request
-    const lastOtpRequest = user.lastOtpRequest ? user.lastOtpRequest.getTime() : 0;
-    
-    if (now - lastOtpRequest < 60_000) { // 1 minute
-      throw new ForbiddenException(
-        'Please wait before requesting another OTP',
-      );
-    }
-
-    const otp = this.generateOtp();
-    user.set('otp', await bcrypt.hash(otp, 10));
-    user.set('otpExpires', new Date(now + 10 * 60 * 1000));
-    user.set('lastOtpRequest', new Date(now)); // Track when OTP was last requested
-    await user.save();
-
-    // Send OTP email (non-blocking)
-    await this.sendOtpEmail(user.email, otp);
-  }
-
-  private async sendOtpEmail(email: string, otp: string) {
-    if (!email || !otp) {
-      throw new BadRequestException('Email and OTP are required');
-    }
-
-    // If no email service is configured, log to console
-    if (this.emailProvider === 'console') {
-      this.logger.log(`📧 OTP email would be sent to ${email}: ${otp}`);
-      return;
-    }
-
-    const from = this.configService.get<string>('EMAIL_USER') || 'noreply@sponsorly.com';
-
-    try {
-      const mailOptions = {
-        from: `"Sponsorly" <${from}>`,
-        to: email,
-        subject: 'Verify your Sponsorly account',
-        html: `
-          <div style="font-family:Arial;max-width:600px;margin:auto;padding:20px;">
-            <h2 style="text-align:center;color:#d20f39">Sponsorly Verification</h2>
-            <p>Hello,</p>
-            <p>Your verification code is:</p>
-            <div style="font-size:32px;font-weight:bold;text-align:center;background:#f8f9fa;padding:15px;border-radius:8px;margin:20px 0;">${otp}</div>
-            <p>Please enter this code in the app to verify your account.</p>
-            <p><strong>Note:</strong> This code expires in 10 minutes.</p>
-            <hr style="margin:30px 0;" />
-            <p style="font-size:0.8em;color:#6c757d;">If you didn't request this verification, please ignore this email.</p>
-          </div>
-        `,
-      };
-
-      await this.transporter.sendMail(mailOptions);
-      this.logger.log(`OTP email sent successfully to ${email} via ${this.emailProvider}`);
-    } catch (error) {
-      this.logger.error(`Failed to send OTP email to ${email} via ${this.emailProvider}:`, error.message);
-      // Don't throw error - let the registration/login continue
-      // The user can request OTP again if needed
-    }
+      .limit(20);
   }
 }
