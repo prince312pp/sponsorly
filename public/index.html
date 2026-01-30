@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sponsorly | Where Brands Meet the Right Creators</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -191,9 +191,9 @@
         // Handle authenticated user
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-            const authLink = document.getElementById('auth-link');
-            if (authLink) {
-                authLink.innerHTML = `
+            const navAuth = document.querySelector('.nav-auth');
+            if (navAuth) {
+                navAuth.innerHTML = `
                     <a href="profile.html" class="profile-icon" title="My Profile">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -203,11 +203,11 @@
                 `;
             }
             
-            // Optionally add Dashboard link if not present
+            // Add Dashboard link to nav-links
             const navLinks = document.getElementById('nav-links');
             const dashLi = document.createElement('li');
             dashLi.innerHTML = '<a href="dashboard.html">Dashboard</a>';
-            navLinks.insertBefore(dashLi, authLink);
+            navLinks.appendChild(dashLi);
         }
     </script>
 </body>
