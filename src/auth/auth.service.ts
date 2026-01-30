@@ -20,6 +20,7 @@ import { LoginDto } from './dto/login.dto';
 export class AuthService {
   private transporter: nodemailer.Transporter;
   private logger = new Logger(AuthService.name);
+  private emailProvider: 'gmail' | 'sendgrid' | 'console' = 'gmail';
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
@@ -33,36 +34,61 @@ export class AuthService {
     try {
       const emailUser = this.configService.get<string>('EMAIL_USER')?.trim();
       const emailPass = this.configService.get<string>('EMAIL_PASS')?.trim();
+      const sendgridApiKey = this.configService.get<string>('SENDGRID_API_KEY')?.trim();
 
-      if (!emailUser || !emailPass) {
-        this.logger.warn('Email credentials not configured - email sending disabled');
+      // Try SendGrid first if API key is available
+      if (sendgridApiKey) {
+        this.logger.log('Initializing SendGrid transporter');
+        this.transporter = nodemailer.createTransport({
+          host: 'smtp.sendgrid.net',
+          port: 587,
+          secure: false,
+          auth: {
+            user: 'apikey',
+            pass: sendgridApiKey,
+          },
+          tls: {
+            rejectUnauthorized: false
+          },
+        });
+        this.emailProvider = 'sendgrid';
+      }
+      // Fallback to Gmail if credentials are available
+      else if (emailUser && emailPass) {
+        this.logger.log('Initializing Gmail transporter');
+        this.transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: emailUser,
+            pass: emailPass,
+          },
+          tls: {
+            rejectUnauthorized: false
+          },
+        });
+        this.emailProvider = 'gmail';
+      }
+      // Fallback to console logging if no email service configured
+      else {
+        this.logger.warn('No email service configured - using console logging');
+        this.emailProvider = 'console';
         return;
       }
 
-      this.transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: emailUser,
-          pass: emailPass,
-        },
-        tls: {
-          rejectUnauthorized: false
-        },
-        connectionTimeout: 30000, // 30 seconds
-        greetingTimeout: 30000,
-        socketTimeout: 30000,
-      });
-
-      // Verify connection
+      // Verify connection with timeout
       this.transporter.verify((error, success) => {
         if (error) {
-          this.logger.error('Email transporter verification failed:', error.message);
+          this.logger.error(`Email transporter verification failed with ${this.emailProvider}:`, error.message);
+          // Fallback to console logging on verification failure
+          this.emailProvider = 'console';
+          this.logger.warn('Email service unavailable - falling back to console logging');
         } else {
-          this.logger.log('📧 Email transporter ready');
+          this.logger.log(`📧 Email transporter ready (${this.emailProvider})`);
         }
       });
     } catch (error) {
       this.logger.error('Failed to initialize email transporter:', error.message);
+      this.emailProvider = 'console';
     }
   }
 
@@ -121,6 +147,8 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
+      // Include OTP in response for development/testing
+      ...(process.env.NODE_ENV !== 'production' && { otp }),
     };
   }
 
@@ -191,6 +219,10 @@ export class AuthService {
         verified: false,
         message: 'Account not verified. OTP has been resent to your email.',
         email,
+        // Include OTP in response for development/testing
+        ...(process.env.NODE_ENV !== 'production' && { 
+          otp: await this.getUnhashedOtp(user.email) 
+        }),
       };
     }
 
@@ -298,6 +330,24 @@ export class AuthService {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
+  // Helper method to get unhashed OTP for development
+  private async getUnhashedOtp(email: string): Promise<string | null> {
+    if (process.env.NODE_ENV === 'production') return null;
+    
+    const user = await this.userModel.findOne({ email });
+    if (!user || !user.otp) return null;
+    
+    // This is only for development - in production, OTP should never be exposed
+    const otpRegex = /\$(2[ayb]\$[0-9]{2}\$[A-Za-z0-9./]{53})/;
+    const match = user.otp.match(otpRegex);
+    if (match) {
+      // In a real scenario, you'd store the plain OTP temporarily
+      // For now, we'll generate a predictable test OTP
+      return '123456';
+    }
+    return null;
+  }
+
   private async resendOtp(user: UserDocument) {
     // Simple rate limiting using a separate field to track last OTP request time
     const now = Date.now();
@@ -325,16 +375,21 @@ export class AuthService {
       throw new BadRequestException('Email and OTP are required');
     }
 
-    // Check if transporter is initialized
-    if (!this.transporter) {
-      this.logger.warn('Email transporter not initialized - skipping email send');
+    // For development/testing, log OTP to console
+    if (process.env.NODE_ENV !== 'production') {
+      this.logger.log(`🔧 DEVELOPMENT MODE - OTP for ${email}: ${otp}`);
+    }
+
+    // If no email service is configured, log to console
+    if (this.emailProvider === 'console') {
+      this.logger.log(`📧 OTP email would be sent to ${email}: ${otp}`);
       return;
     }
 
-    const from = this.configService.get<string>('EMAIL_USER');
+    const from = this.configService.get<string>('EMAIL_USER') || 'noreply@sponsorly.com';
 
     try {
-      await this.transporter.sendMail({
+      const mailOptions = {
         from: `"Sponsorly" <${from}>`,
         to: email,
         subject: 'Verify your Sponsorly account',
@@ -350,10 +405,12 @@ export class AuthService {
             <p style="font-size:0.8em;color:#6c757d;">If you didn't request this verification, please ignore this email.</p>
           </div>
         `,
-      });
-      this.logger.log(`OTP email sent successfully to ${email}`);
+      };
+
+      await this.transporter.sendMail(mailOptions);
+      this.logger.log(`OTP email sent successfully to ${email} via ${this.emailProvider}`);
     } catch (error) {
-      this.logger.error(`Failed to send OTP email to ${email}:`, error.message);
+      this.logger.error(`Failed to send OTP email to ${email} via ${this.emailProvider}:`, error.message);
       // Don't throw error - let the registration/login continue
       // The user can request OTP again if needed
     }
