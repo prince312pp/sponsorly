@@ -44,4 +44,12 @@ export class AuthController {
   async discoverSame(@Body() body: { role: string; email: string }) {
     return this.authService.discoverSame(body.role, body.email);
   }
+
+  @Post('contact-support')
+  async contactSupport(@Body() contactData: { name: string; email: string; message: string }) {
+    // Simple contact support implementation
+    // In a real application, you would send an email or store in database
+    console.log('Contact Support Request:', contactData);
+    return { message: 'Thank you for your message. We will get back to you soon.' };
+  }
 }
