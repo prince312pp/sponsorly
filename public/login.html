@@ -59,10 +59,8 @@
                         errorDiv.style.display = 'block';
                         errorDiv.innerHTML = result.message;
                     } else {
-                        alert('Login successful!');
                         localStorage.setItem('user', JSON.stringify(result.user));
                         localStorage.setItem('access_token', result.access_token);
-                        
                         window.location.href = 'dashboard.html';
                     }
                 } else {

@@ -33,21 +33,105 @@
             color: var(--secondary-color);
             text-decoration: underline;
         }
+        .navbar {
+            background: var(--bg-color);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--caffeine-border);
+        }
+        
         .navbar .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
         }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
         .nav-links {
-            list-style: none;
             display: flex;
+            list-style: none;
             gap: 2rem;
-            align-items: center;
         }
+        
         .nav-links a {
             text-decoration: none;
             color: var(--secondary-color);
             font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--secondary-color);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+        
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--bg-color);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: 0.3s;
+                border-bottom: 1px solid var(--caffeine-border);
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.2rem;
+                padding: 0.5rem 1rem;
+            }
         }
         .discovery-section {
             padding: 2rem;
@@ -307,15 +391,22 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">Sponsorly</div>
-        <nav class="nav-links">
-            <a href="dashboard.html">Dashboard</a>
-            <a href="discover.html">Discover</a>
-            <a href="messages.html">Messages</a>
-            <a href="#" onclick="logout()">Logout</a>
-        </nav>
-    </header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links">
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="messages.html">Messages</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
     <div class="dashboard-container" style="height: auto; min-height: 200px; padding: 4rem 0;">
         <div class="dashboard-card">
             <h1 id="welcome-msg">Loading...</h1>
