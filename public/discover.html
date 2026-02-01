@@ -241,6 +241,7 @@
         <nav class="nav-links">
             <a href="dashboard.html">Dashboard</a>
             <a href="discover.html">Discover</a>
+            <a href="messages.html">Messages</a>
             <a href="#" onclick="logout()">Logout</a>
         </nav>
     </header>
@@ -360,19 +361,8 @@
 
         // Direct Message functionality
         function directMessage(email) {
-            const message = prompt('Enter your message:');
-            if (message) {
-                const subject = 'Direct Message from Sponsorly';
-                const body = `Hello,
-
-I'd like to connect with you through Sponsorly.
-
-Message: ${message}
-
-Best regards`;
-                const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                window.open(mailtoLink, '_blank');
-            }
+            // Redirect to messages page with pre-selected user
+            window.location.href = `messages.html?user=${encodeURIComponent(email)}`;
         }
 
         // Logout functionality

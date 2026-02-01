@@ -307,21 +307,15 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
-            <ul class="nav-links">
-                <li><a href="discovery.html">Discovery</a></li>
-                <li><a href="profile.html">Profile</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
-            </ul>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+    <header class="header">
+        <div class="logo">Sponsorly</div>
+        <nav class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="discover.html">Discover</a>
+            <a href="messages.html">Messages</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </nav>
+    </header>
     <div class="dashboard-container" style="height: auto; min-height: 200px; padding: 4rem 0;">
         <div class="dashboard-card">
             <h1 id="welcome-msg">Loading...</h1>
