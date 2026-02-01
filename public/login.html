@@ -57,7 +57,7 @@
                     if (result.verified === false) {
                         localStorage.setItem('pendingEmail', result.email);
                         errorDiv.style.display = 'block';
-                        errorDiv.innerHTML = `${result.message} <a href="verify-otp.html" style="color: #2563eb; text-decoration: underline;">Click here to verify</a>`;
+                        errorDiv.innerHTML = result.message;
                     } else {
                         alert('Login successful!');
                         localStorage.setItem('user', JSON.stringify(result.user));

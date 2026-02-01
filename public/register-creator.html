@@ -155,7 +155,7 @@
                 const result = await res.json();
                 if (res.ok) {
                     localStorage.setItem('pendingEmail', data.email);
-                    window.location.href = 'verify-otp.html';
+                    window.location.href = 'login.html';
                 } else {
                     alert(result.message);
                 }
