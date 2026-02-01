@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover - Sponsorly</title>
+    <style>
+        :root {
+            --primary: #d20f39;
+            --primary-dark: #b00d33;
+            --secondary: #f8f9fa;
+            --secondary-dark: #e9ecef;
+            --dark-bg: #1a1a1a;
+            --dark-surface: #2d2d2d;
+            --dark-border: #404040;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--dark-surface);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--dark-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .filters {
+            background: var(--dark-surface);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--dark-border);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+        }
+
+        .filter-group select {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--dark-border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .user-card {
+            background: var(--dark-surface);
+            border: 1px solid var(--dark-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .user-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .user-header h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .user-role {
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .user-email {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .user-bio {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .user-location, .user-platform, .user-followers, .user-company, .user-budget {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--text-primary);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+
+        .no-users {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Sponsorly</div>
+        <nav class="nav-links">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="discover.html">Discover</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1 class="section-title">Discover Creators & Sponsors</h1>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label for="role-filter">Looking for:</label>
+                <select id="role-filter" onchange="filterUsers()">
+                    <option value="creator">Creators</option>
+                    <option value="sponsor">Sponsors</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="users-container" class="users-grid">
+            <!-- Users will be loaded here -->
+        </div>
+    </main>
+
+    <script>
+        let allUsers = [];
+        let currentUser = null;
+
+        // Get current user from token
+        async function getCurrentUser() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUser = payload;
+                loadUsers();
+            } catch (error) {
+                console.error('Invalid token:', error);
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Load users from API
+        async function loadUsers() {
+            try {
+                const response = await fetch('/auth/discover', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ role: currentUser.role })
+                });
+
+                if (response.ok) {
+                    allUsers = await response.json();
+                    renderUsers(allUsers);
+                } else {
+                    console.error('Failed to load users');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        // Filter users by role
+        function filterUsers() {
+            const roleFilter = document.getElementById('role-filter').value;
+            const filteredUsers = allUsers.filter(user => user.role === roleFilter);
+            renderUsers(filteredUsers);
+        }
+
+        // Render users in the grid
+        function renderUsers(users) {
+            const container = document.getElementById('users-container');
+            container.innerHTML = '';
+
+            if (users.length === 0) {
+                container.innerHTML = '<div class="no-users">No users found matching your criteria.</div>';
+                return;
+            }
+
+            users.forEach(user => {
+                const userCard = document.createElement('div');
+                userCard.className = 'user-card';
+                userCard.innerHTML = `
+                    <div class="user-header">
+                        <h3>${user.firstName} ${user.lastName}</h3>
+                        <span class="user-role">${user.role}</span>
+                    </div>
+                    <p class="user-email">${user.email}</p>
+                    ${user.bio ? `<p class="user-bio">${user.bio}</p>` : ''}
+                    ${user.location ? `<p class="user-location">📍 ${user.location}</p>` : ''}
+                    ${user.platform ? `<p class="user-platform">Platform: ${user.platform}</p>` : ''}
+                    ${user.followers ? `<p class="user-followers">Followers: ${user.followers.toLocaleString()}</p>` : ''}
+                    ${user.companyName ? `<p class="user-company">Company: ${user.companyName}</p>` : ''}
+                    ${user.budget ? `<p class="user-budget">Budget: ${user.budget}</p>` : ''}
+                    <div class="user-actions">
+                        <button class="btn-primary" onclick="connectNow('${user.email}')">Connect Now</button>
+                        <button class="btn-secondary" onclick="directMessage('${user.email}')">DM</button>
+                    </div>
+                `;
+                container.appendChild(userCard);
+            });
+        }
+
+        // Connect Now functionality (opens email client)
+        function connectNow(email) {
+            const subject = 'Connection Request from Sponsorly';
+            const body = 'Hello,\n\nI would like to connect with you through Sponsorly.\n\nBest regards';
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.open(mailtoLink, '_blank');
+        }
+
+        // Direct Message functionality
+        function directMessage(email) {
+            const message = prompt('Enter your message:');
+            if (message) {
+                const subject = 'Direct Message from Sponsorly';
+                const body = `Hello,
+
+I'd like to connect with you through Sponsorly.
+
+Message: ${message}
+
+Best regards`;
+                const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.open(mailtoLink, '_blank');
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', getCurrentUser);
+    </script>
+</body>
+</html>
