@@ -1,4 +1,15 @@
-import { IsEmail, IsNotEmpty, MinLength, IsString, IsEnum, IsOptional, IsNumber, IsDateString, IsArray, ValidateNested } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsNumber,
+  IsDateString,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class LinkDto {

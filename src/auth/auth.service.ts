@@ -27,7 +27,8 @@ export class AuthService {
   /* -------------------------------- REGISTER -------------------------------- */
 
   async register(data: RegisterDto) {
-    const { email, password, confirmPassword, firstName, lastName, role } = data;
+    const { email, password, confirmPassword, firstName, lastName, role } =
+      data;
 
     // Validate input data
     if (!email || !password || !firstName || !lastName || !role) {
@@ -42,7 +43,9 @@ export class AuthService {
 
     // Validate password strength
     if (password.length < 6) {
-      throw new BadRequestException('Password must be at least 6 characters long');
+      throw new BadRequestException(
+        'Password must be at least 6 characters long',
+      );
     }
 
     if (password !== confirmPassword) {
@@ -58,13 +61,16 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await this.userModel.create({
-      ...data,
+      firstName,
+      lastName,
+      email,
       password: hashedPassword,
+      role,
       verified: true, // Auto-verify users
     });
 
-    return { 
-      message: 'Registration successful.', 
+    return {
+      message: 'Registration successful.',
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -87,9 +93,7 @@ export class AuthService {
       throw new BadRequestException('Invalid email format');
     }
 
-    const user = await this.userModel
-      .findOne({ email })
-      .select('+password');
+    const user = await this.userModel.findOne({ email }).select('+password');
 
     if (!user) {
       throw new BadRequestException('Invalid credentials');
@@ -123,15 +127,13 @@ export class AuthService {
       throw new BadRequestException('Email is required');
     }
 
-    const user = await this.userModel
-      .findOne({ email })
-      .select('-password');
+    const user = await this.userModel.findOne({ email }).select('-password');
 
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
 
-  async updateProfile(email: string, updates: any) {
+  async updateProfile(email: string, updates: Record<string, any>) {
     if (!email) {
       throw new BadRequestException('Email is required');
     }
@@ -178,11 +180,13 @@ export class AuthService {
     if (!role) {
       throw new BadRequestException('Role is required');
     }
-    
+
     const targetRole = role === 'sponsor' ? 'creator' : 'sponsor';
     return this.userModel
       .find({ role: targetRole, verified: true })
-      .select('firstName lastName email platform followers budget companyName role bio location')
+      .select(
+        'firstName lastName email platform followers budget companyName role bio location',
+      )
       .limit(20);
   }
 
@@ -190,10 +194,12 @@ export class AuthService {
     if (!role || !email) {
       throw new BadRequestException('Role and email are required');
     }
-    
+
     return this.userModel
       .find({ role, verified: true, email: { $ne: email } })
-      .select('firstName lastName email platform followers budget companyName role bio location')
+      .select(
+        'firstName lastName email platform followers budget companyName role bio location',
+      )
       .limit(20);
   }
 }

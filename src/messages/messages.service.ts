@@ -9,6 +9,19 @@ import { Model, Types } from 'mongoose';
 import { Message, MessageDocument } from './schemas/message.schema';
 import { User, UserDocument } from '../users/schemas/user.schema';
 
+interface ConversationPartner {
+  _id: Types.ObjectId;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+interface Conversation {
+  user: ConversationPartner;
+  lastMessage: MessageDocument;
+  unreadCount: number;
+}
+
 @Injectable()
 export class MessagesService {
   private logger = new Logger(MessagesService.name);
@@ -18,9 +31,15 @@ export class MessagesService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async sendMessage(senderEmail: string, receiverEmail: string, content: string) {
+  async sendMessage(
+    senderEmail: string,
+    receiverEmail: string,
+    content: string,
+  ) {
     if (!senderEmail || !receiverEmail || !content) {
-      throw new BadRequestException('Sender, receiver, and content are required');
+      throw new BadRequestException(
+        'Sender, receiver, and content are required',
+      );
     }
 
     if (content.trim().length === 0) {
@@ -115,13 +134,13 @@ export class MessagesService {
       .sort({ timestamp: -1 });
 
     // Group by conversation partner
-    const conversations = new Map();
-    
-    messages.forEach(message => {
-      const sender = message.sender as any;
-      const receiver = message.receiver as any;
+    const conversations = new Map<string, Conversation>();
+
+    messages.forEach((message) => {
+      const sender = message.sender as unknown as ConversationPartner;
+      const receiver = message.receiver as unknown as ConversationPartner;
       const otherUser = sender.email === userEmail ? receiver : sender;
-      
+
       const key = otherUser.email;
       if (!conversations.has(key)) {
         conversations.set(key, {
@@ -131,17 +150,23 @@ export class MessagesService {
         });
       } else {
         const convo = conversations.get(key);
-        if (receiver.email === userEmail && !message.read) {
-          convo.unreadCount++;
-        }
-        if (message.timestamp > convo.lastMessage.timestamp) {
-          convo.lastMessage = message;
+        if (convo) {
+          if (receiver.email === userEmail && !message.read) {
+            convo.unreadCount++;
+          }
+          if (
+            message.timestamp.getTime() > convo.lastMessage.timestamp.getTime()
+          ) {
+            convo.lastMessage = message;
+          }
         }
       }
     });
 
-    return Array.from(conversations.values())
-      .sort((a, b) => b.lastMessage.timestamp - a.lastMessage.timestamp);
+    return Array.from(conversations.values()).sort(
+      (a, b) =>
+        b.lastMessage.timestamp.getTime() - a.lastMessage.timestamp.getTime(),
+    );
   }
 
   async getUnreadCount(userEmail: string) {
