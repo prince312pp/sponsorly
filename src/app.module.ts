@@ -20,7 +20,6 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      exclude: ['/api/:path*', '/auth/:path*'],
     }),
   ],
   controllers: [AppController],
