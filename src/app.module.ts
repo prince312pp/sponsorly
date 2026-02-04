@@ -22,10 +22,10 @@ import { MessagesModule } from './messages/messages.module';
     MessagesModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      exclude: ['/api*', '/auth*', '/messages*'],
+      exclude: ['/api/(.*)', '/auth/(.*)', '/messages/(.*)'],
     }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
