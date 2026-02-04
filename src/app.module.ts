@@ -7,7 +7,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -19,13 +18,12 @@ import { MessagesModule } from './messages/messages.module';
     ),
     AuthModule,
     UsersModule,
-    MessagesModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      exclude: ['/api/(.*)', '/auth/(.*)', '/messages/(.*)'],
+      exclude: ['/api/(.*)', '/auth/(.*)'],
     }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
