@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -11,10 +12,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             text-align: center;
             background-color: var(--light-gray);
+            padding: 4rem 0;
         }
+
         .dashboard-card {
             background: var(--bg-color);
             padding: 3rem;
@@ -22,10 +24,12 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--caffeine-border);
         }
+
         h1 {
             color: var(--primary-color);
             margin-bottom: 1rem;
         }
+
         .logout-btn {
             margin-top: 2rem;
             display: inline-block;
@@ -33,44 +37,7 @@
             color: var(--secondary-color);
             text-decoration: underline;
         }
-        .navbar {
-            background: var(--bg-color);
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--caffeine-border);
-        }
-        
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: var(--secondary-color);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary-color);
-        }
-        
+
         .hamburger {
             display: none;
             flex-direction: column;
@@ -79,7 +46,7 @@
             cursor: pointer;
             padding: 0.5rem;
         }
-        
+
         .hamburger span {
             width: 25px;
             height: 3px;
@@ -87,24 +54,24 @@
             margin: 3px 0;
             transition: 0.3s;
         }
-        
+
         .hamburger.active span:nth-child(1) {
             transform: rotate(-45deg) translate(-5px, 6px);
         }
-        
+
         .hamburger.active span:nth-child(2) {
             opacity: 0;
         }
-        
+
         .hamburger.active span:nth-child(3) {
             transform: rotate(45deg) translate(-5px, -6px);
         }
-        
+
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
             }
-            
+
             .nav-links {
                 position: fixed;
                 top: 70px;
@@ -119,31 +86,34 @@
                 transition: 0.3s;
                 border-bottom: 1px solid var(--caffeine-border);
             }
-            
+
             .nav-links.active {
                 left: 0;
             }
-            
+
             .nav-links li {
                 margin: 1rem 0;
             }
-            
+
             .nav-links a {
                 font-size: 1.2rem;
                 padding: 0.5rem 1rem;
             }
         }
+
         .discovery-section {
             padding: 2rem;
             max-width: 1200px;
             margin: 0 auto;
         }
+
         .discovery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
+
         .card {
             background: var(--bg-color);
             padding: 1.5rem;
@@ -155,11 +125,12 @@
             gap: 1rem;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
+
         .avatar {
             width: 60px;
             height: 60px;
@@ -173,115 +144,119 @@
             font-weight: bold;
             flex-shrink: 0;
         }
+
         .info h3 {
             margin: 0;
             font-size: 1.1rem;
         }
+
         .info p {
             margin: 0.2rem 0;
             font-size: 0.9rem;
             color: var(--secondary-color);
         }
+
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 2rem;
         }
+
         .view-all {
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 600;
         }
-        
+
         /* Dark mode styles for dashboard */
         [data-theme="dark"] .dashboard-container {
             background-color: var(--dark-surface);
         }
-        
+
         [data-theme="dark"] .dashboard-card {
             background: var(--dark-surface);
             color: var(--dark-text);
         }
-        
+
         [data-theme="dark"] .dashboard-card {
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .card {
             background: var(--dark-surface);
             color: var(--dark-text);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .card:hover {
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
-        
+
         [data-theme="dark"] .info p {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .view-all {
             color: var(--primary-color);
         }
-        
+
         [data-theme="dark"] .nav-links a {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .nav-links a:hover {
             color: var(--primary-color);
         }
-        
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .dashboard-container {
                 padding: 0.75rem;
                 min-height: 100vh;
             }
-            
+
             .dashboard-card {
                 padding: 1.5rem;
                 margin-bottom: 1.5rem;
             }
-            
+
             .dashboard-card h1 {
                 font-size: 1.4rem;
                 margin-bottom: 0.5rem;
                 text-align: center;
             }
-            
+
             .dashboard-card p {
                 font-size: 0.9rem;
                 text-align: center;
             }
-            
+
             .discovery-section {
                 padding: 1rem 0.75rem;
             }
-            
+
             .section-header {
                 flex-direction: column;
                 gap: 0.75rem;
                 text-align: center;
                 margin-bottom: 1rem;
             }
-            
+
             .section-header h2 {
                 font-size: 1.3rem;
             }
-            
+
             .view-all {
                 font-size: 0.9rem;
                 padding: 0.4rem 0.8rem;
             }
-            
+
             .discovery-grid {
                 grid-template-columns: 1fr;
                 gap: 0.75rem;
             }
-            
+
             .card {
                 padding: 0.8rem;
                 flex-direction: row;
@@ -289,7 +264,7 @@
                 align-items: center;
                 gap: 0.75rem;
             }
-            
+
             .avatar {
                 width: 45px;
                 height: 45px;
@@ -297,92 +272,92 @@
                 margin-bottom: 0;
                 flex-shrink: 0;
             }
-            
+
             .info {
                 flex: 1;
             }
-            
+
             .info h3 {
                 font-size: 0.95rem;
                 margin-bottom: 0.25rem;
             }
-            
+
             .info p {
                 font-size: 0.8rem;
                 margin-bottom: 0.1rem;
             }
-            
+
             .navbar {
                 padding: 0.5rem 0;
             }
-            
+
             .navbar .container {
                 flex-direction: column;
                 gap: 0.75rem;
             }
-            
+
             .logo {
                 font-size: 1.2rem;
                 text-align: center;
             }
-            
+
             .nav-links {
                 justify-content: center;
                 flex-wrap: wrap;
                 gap: 0.5rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.7rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .dashboard-container {
                 padding: 0.5rem;
             }
-            
+
             .dashboard-card {
                 padding: 1.25rem;
             }
-            
+
             .dashboard-card h1 {
                 font-size: 1.2rem;
             }
-            
+
             .dashboard-card p {
                 font-size: 0.8rem;
             }
-            
+
             .section-header h2 {
                 font-size: 1.1rem;
             }
-            
+
             .view-all {
                 font-size: 0.8rem;
                 padding: 0.3rem 0.6rem;
             }
-            
+
             .card {
                 padding: 0.6rem;
                 gap: 0.5rem;
             }
-            
+
             .avatar {
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;
             }
-            
+
             .info h3 {
                 font-size: 0.85rem;
             }
-            
+
             .info p {
                 font-size: 0.7rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.8rem;
                 padding: 0.35rem 0.6rem;
@@ -390,13 +365,13 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
             <ul class="nav-links">
                 <li><a href="discover.html">Discover</a></li>
-                <li><a href="messages.html">Messages</a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
@@ -424,17 +399,45 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact Support</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
+        // Prevent bfcache restoration after logout
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted || (performance.getEntriesByType('navigation')[0] &&
+                performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    window.location.replace('login.html');
+                }
+            }
+        });
         // Hamburger menu functionality
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.querySelector('.nav-links');
-        
+
         if (hamburger && navLinks) {
             hamburger.addEventListener('click', () => {
                 hamburger.classList.toggle('active');
                 navLinks.classList.toggle('active');
             });
-            
+
             // Close menu when clicking on a link
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
@@ -442,7 +445,7 @@
                     navLinks.classList.remove('active');
                 });
             });
-            
+
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
@@ -451,13 +454,13 @@
                 }
             });
         }
-        
+
         const user = JSON.parse(localStorage.getItem('user'));
-        
+
         if (!user) {
             window.location.href = 'login.html';
         } else {
-            document.getElementById('welcome-msg').textContent = `Welcome, ${user.firstName||"User"}!`;
+            document.getElementById('welcome-msg').textContent = `Welcome, ${user.firstName || "User"}!`;
             if (user.role === 'creator') {
                 document.getElementById('role-msg').textContent = "This is creator homepage";
                 document.getElementById('discovery-title').textContent = "Featured Sponsors";
@@ -472,7 +475,7 @@
             try {
                 const res = await fetch('/auth/discover', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
@@ -494,24 +497,27 @@
         function renderCards(items) {
             const grid = document.getElementById('discovery-grid');
             grid.innerHTML = items.map(item => `
-                <div class="card" onclick="window.location.href='profile.html?email=${item.email}'" style="cursor: pointer;">
-                    <div class="avatar">${item.firstName[0]}</div>
-                    <div class="info">
-                        <h3>${item.firstName} ${item.lastName}</h3>
-                        ${item.role === 'creator' ? 
-                            `<p>Platform: ${item.platform}</p><p>Followers: ${Number(item.followers).toLocaleString()}</p>` : 
-                            `<p>Company: ${item.companyName}</p><p>Budget: ${item.budget}</p>`
-                        }
-                    </div>
-                </div>
-            `).join('');
+    <div class="card" onclick="window.location.href='profile.html?email=${item.email}'" style="cursor: pointer;">
+        <div class="avatar">${item.firstName[0]}</div>
+        <div class="info">
+            <h3>${item.firstName} ${item.lastName}</h3>
+            ${item.role === 'creator' ?
+                    `<p>Platform: ${item.platform}</p>
+            <p>Followers: ${Number(item.followers).toLocaleString()}</p>` :
+                    `<p>Company: ${item.companyName}</p>
+            <p>Budget: ${item.budget}</p>`
+                }
+        </div>
+    </div>
+    `).join('');
         }
 
         function logout() {
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
-            window.location.href = 'index.html';
+            window.location.replace('login.html');
         }
     </script>
 </body>
+
 </html>

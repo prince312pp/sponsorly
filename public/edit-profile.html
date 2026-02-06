@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -13,6 +14,7 @@
             background-color: var(--light-gray);
             min-height: calc(100vh - 80px);
         }
+
         .profile-card {
             background: var(--bg-color);
             padding: 3rem;
@@ -22,6 +24,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         .form-group {
             margin-bottom: 1.5rem;
             padding: 1rem;
@@ -29,13 +32,16 @@
             border: 1px solid var(--caffeine-border);
             background: var(--light-gray);
         }
+
         .form-row {
             display: flex;
             gap: 1.5rem;
         }
+
         .form-col {
             flex: 1;
         }
+
         .btn-save {
             background-color: var(--primary-color);
             color: white;
@@ -46,6 +52,7 @@
             cursor: pointer;
             margin-right: 0.5rem;
         }
+
         .btn-cancel {
             background-color: var(--secondary-color);
             color: white;
@@ -55,29 +62,31 @@
             font-weight: 600;
             cursor: pointer;
         }
+
         .btn-save:hover {
             opacity: 0.9;
         }
+
         .btn-cancel:hover {
             opacity: 0.9;
         }
-        
+
         /* Dark mode styles for edit profile */
         [data-theme="dark"] .profile-section {
             background-color: var(--dark-surface);
         }
-        
+
         [data-theme="dark"] .profile-card {
             background: var(--dark-surface);
             color: var(--dark-text);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .form-group {
             background: var(--dark-surface);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .form-group input,
         [data-theme="dark"] .form-group select,
         [data-theme="dark"] .form-group textarea {
@@ -85,54 +94,54 @@
             color: var(--dark-text);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .form-group input::placeholder,
         [data-theme="dark"] .form-group select::placeholder,
         [data-theme="dark"] .form-group textarea::placeholder {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .nav-links a {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .nav-links a:hover {
             color: var(--primary-color);
         }
-        
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .profile-section {
                 padding: 0.75rem 0;
                 min-height: 100vh;
             }
-            
+
             .profile-card {
                 padding: 1.5rem;
                 margin: 0 0.75rem;
             }
-            
+
             .profile-card h1 {
                 font-size: 1.3rem;
                 text-align: center;
                 margin-bottom: 1rem;
             }
-            
+
             .form-row {
                 flex-direction: column;
                 gap: 0.6rem;
             }
-            
+
             .form-group {
                 padding: 0.6rem;
                 margin-bottom: 0.5rem;
             }
-            
+
             .form-group label {
                 font-size: 0.85rem;
                 margin-bottom: 0.3rem;
             }
-            
+
             .form-group input,
             .form-group select,
             .form-group textarea {
@@ -140,11 +149,11 @@
                 font-size: 0.95rem;
                 border-width: 1px;
             }
-            
+
             .form-group textarea {
                 min-height: 80px;
             }
-            
+
             .btn-save,
             .btn-cancel {
                 width: 100%;
@@ -152,74 +161,74 @@
                 font-size: 0.95rem;
                 margin-bottom: 0.5rem;
             }
-            
+
             .navbar {
                 padding: 0.5rem 0;
             }
-            
+
             .navbar .container {
                 flex-direction: column;
                 gap: 0.75rem;
             }
-            
+
             .logo {
                 font-size: 1.2rem;
                 text-align: center;
             }
-            
+
             .nav-links {
                 justify-content: center;
                 flex-wrap: wrap;
                 gap: 0.5rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.7rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .profile-section {
                 padding: 0.5rem 0;
             }
-            
+
             .profile-card {
                 padding: 1.25rem;
                 margin: 0 0.5rem;
             }
-            
+
             .profile-card h1 {
                 font-size: 1.1rem;
                 margin-bottom: 0.75rem;
             }
-            
+
             .form-group {
                 padding: 0.5rem;
                 margin-bottom: 0.4rem;
             }
-            
+
             .form-group label {
                 font-size: 0.8rem;
             }
-            
+
             .form-group input,
             .form-group select,
             .form-group textarea {
                 padding: 0.45rem;
                 font-size: 0.85rem;
             }
-            
+
             .form-group textarea {
                 min-height: 70px;
             }
-            
+
             .btn-save,
             .btn-cancel {
                 padding: 0.55rem;
                 font-size: 0.85rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.8rem;
                 padding: 0.35rem 0.6rem;
@@ -227,6 +236,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
@@ -248,7 +258,7 @@
         <div class="container">
             <div class="profile-card">
                 <h1>Edit Profile</h1>
-                
+
                 <form id="edit-profile-form">
                     <div class="form-row">
                         <div class="form-col">
@@ -264,26 +274,35 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" readonly autocomplete="off">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="location">Location</label>
                         <input type="text" id="location" name="location" autocomplete="off">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="bio">Bio</label>
                         <textarea id="bio" name="bio" rows="4" autocomplete="off"></textarea>
                     </div>
-                    
+
+                    <div class="form-group">
+                        <label>Website Links</label>
+                        <div id="links-container">
+                            <!-- Links will be added here dynamically -->
+                        </div>
+                        <button type="button" onclick="addLinkField()" class="btn-secondary"
+                            style="margin-top: 0.5rem; padding: 0.5rem 1rem;">+ Add Link</button>
+                    </div>
+
                     <div id="role-specific-fields">
                         <!-- Role-specific fields will be inserted here -->
                     </div>
-                    
+
                     <div class="form-group">
                         <button type="submit" class="btn-save">Save Changes</button>
                         <a href="profile.html" class="btn-cancel">Cancel</a>
@@ -293,17 +312,45 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact Support</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
+        // Prevent bfcache restoration after logout
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted || (performance.getEntriesByType('navigation')[0] &&
+                performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    window.location.replace('login.html');
+                }
+            }
+        });
         // Hamburger menu functionality
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.querySelector('.nav-links');
-        
+
         if (hamburger && navLinks) {
             hamburger.addEventListener('click', () => {
                 hamburger.classList.toggle('active');
                 navLinks.classList.toggle('active');
             });
-            
+
             // Close menu when clicking on a link
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
@@ -311,7 +358,7 @@
                     navLinks.classList.remove('active');
                 });
             });
-            
+
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
@@ -320,7 +367,7 @@
                 }
             });
         }
-        
+
         const userSession = JSON.parse(localStorage.getItem('user'));
         if (!userSession) {
             window.location.href = 'login.html';
@@ -332,7 +379,7 @@
             try {
                 const res = await fetch('/auth/profile', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
@@ -343,7 +390,7 @@
                     return;
                 }
                 const user = await res.json();
-                
+
                 if (res.ok) {
                     currentUser = user;
                     populateForm(user);
@@ -355,6 +402,25 @@
             }
         }
 
+        let linkCounter = 0;
+
+        function addLinkField(label = '', url = '') {
+            const container = document.getElementById('links-container');
+            const linkDiv = document.createElement('div');
+            linkDiv.className = 'link-item';
+            linkDiv.style.cssText = 'display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center;';
+            linkDiv.innerHTML = `
+    <input type="text" placeholder="Label (e.g., Website, YouTube)" value="${label}" name="link-label-${linkCounter}"
+        style="flex: 1; padding: 0.5rem; border: 1px solid var(--caffeine-border); border-radius: 4px;">
+    <input type="url" placeholder="https://example.com" value="${url}" name="link-url-${linkCounter}"
+        style="flex: 2; padding: 0.5rem; border: 1px solid var(--caffeine-border); border-radius: 4px;">
+    <button type="button" onclick="this.parentElement.remove()"
+        style="padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Remove</button>
+    `;
+            container.appendChild(linkDiv);
+            linkCounter++;
+        }
+
         function populateForm(user) {
             document.getElementById('firstName').value = user.firstName || '';
             document.getElementById('lastName').value = user.lastName || '';
@@ -362,53 +428,62 @@
             document.getElementById('location').value = user.location || '';
             document.getElementById('bio').value = user.bio || '';
 
+            // Populate existing links
+            const linksContainer = document.getElementById('links-container');
+            linksContainer.innerHTML = '';
+            if (user.links && user.links.length > 0) {
+                user.links.forEach(link => {
+                    addLinkField(link.label, link.url);
+                });
+            }
+
             const roleFieldsContainer = document.getElementById('role-specific-fields');
-            
+
             if (user.role === 'creator') {
                 roleFieldsContainer.innerHTML = `
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="platform">Platform</label>
-                                <select id="platform" name="platform" autocomplete="off">
-                                    <option value="">Select Platform</option>
-                                    <option value="YouTube">YouTube</option>
-                                    <option value="Instagram">Instagram</option>
-                                    <option value="TikTok">TikTok</option>
-                                    <option value="Twitter">Twitter</option>
-                                    <option value="Facebook">Facebook</option>
-                                    <option value="LinkedIn">LinkedIn</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="handle">Handle</label>
-                                <input type="text" id="handle" name="handle" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="followers">Followers</label>
-                                <input type="number" id="followers" name="followers" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="audienceReach">Audience Reach</label>
-                                <input type="text" id="audienceReach" name="audienceReach" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="dob">Date of Birth</label>
-                        <input type="date" id="dob" name="dob" autocomplete="off">
-                    </div>
-                `;
-                
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="platform">Platform</label>
+                <select id="platform" name="platform" autocomplete="off">
+                    <option value="">Select Platform</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="TikTok">TikTok</option>
+                    <option value="Twitter">Twitter</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="handle">Handle</label>
+                <input type="text" id="handle" name="handle" autocomplete="off">
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="followers">Followers</label>
+                <input type="number" id="followers" name="followers" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="audienceReach">Audience Reach</label>
+                <input type="text" id="audienceReach" name="audienceReach" autocomplete="off">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" name="dob" autocomplete="off">
+    </div>
+    `;
+
                 document.getElementById('platform').value = user.platform || '';
                 document.getElementById('handle').value = user.handle || '';
                 document.getElementById('followers').value = user.followers || '';
@@ -418,42 +493,42 @@
                 }
             } else if (user.role === 'sponsor') {
                 roleFieldsContainer.innerHTML = `
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="companyName">Company Name</label>
-                                <input type="text" id="companyName" name="companyName" autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="noOfEmployees">Team Size</label>
-                                <input type="number" id="noOfEmployees" name="noOfEmployees" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="budget">Monthly Budget</label>
-                                <select id="budget" name="budget" autocomplete="off"> 
-                            <option value="">Select Budget Range</option>
-                            <option value="₹50k">₹50,000</option>
-                            <option value="₹50k-₹2L">₹50,000 - ₹2,00,000</option>
-                            <option value="₹2L-₹10L">₹2,00,000 - ₹10,00,000</option>
-                            <option value="₹10L+">₹10,00,000+</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="requirements">Collaboration Requirements</label>
-                                <textarea id="requirements" name="requirements" rows="4" autocomplete="off"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="companyName">Company Name</label>
+                <input type="text" id="companyName" name="companyName" autocomplete="off">
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="noOfEmployees">Team Size</label>
+                <input type="number" id="noOfEmployees" name="noOfEmployees" autocomplete="off">
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-col">
+            <div class="form-group">
+                <label for="budget">Monthly Budget</label>
+                <select id="budget" name="budget" autocomplete="off">
+                    <option value="">Select Budget Range</option>
+                    <option value="₹50k">₹50,000</option>
+                    <option value="₹50k-₹2L">₹50,000 - ₹2,00,000</option>
+                    <option value="₹2L-₹10L">₹2,00,000 - ₹10,00,000</option>
+                    <option value="₹10L+">₹10,00,000+</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-col">
+            <div class="form-group">
+                <label for="requirements">Collaboration Requirements</label>
+                <textarea id="requirements" name="requirements" rows="4" autocomplete="off"></textarea>
+            </div>
+        </div>
+    </div>
+    `;
+
                 document.getElementById('companyName').value = user.companyName || '';
                 document.getElementById('noOfEmployees').value = user.noOfEmployees || '';
                 document.getElementById('budget').value = user.budget || '';
@@ -463,34 +538,54 @@
 
         document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const formData = new FormData(e.target);
             const updatedData = Object.fromEntries(formData.entries());
-            
+
+            // Collect all links
+            const links = [];
+            const linkItems = document.querySelectorAll('#links-container .link-item');
+            linkItems.forEach(item => {
+                const inputs = item.querySelectorAll('input');
+                const label = inputs[0].value.trim();
+                const url = inputs[1].value.trim();
+                if (label && url) {
+                    links.push({ label, url });
+                }
+            });
+
+            // Remove individual link fields from updatedData and add links array
+            Object.keys(updatedData).forEach(key => {
+                if (key.startsWith('link-')) {
+                    delete updatedData[key];
+                }
+            });
+            updatedData.links = links;
+
             // Add the email to identify the user
             updatedData.email = userSession.email;
-            
+
             try {
                 const res = await fetch('/auth/update-profile', {
                     method: 'PUT',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
                     body: JSON.stringify(updatedData)
                 });
-                
+
                 if (res.status === 401) {
                     logout();
                     return;
                 }
-                
+
                 const result = await res.json();
-                
+
                 if (res.ok) {
                     alert('Profile updated successfully!');
                     // Update the user data in localStorage
-                    const updatedUser = {...userSession, ...updatedData};
+                    const updatedUser = { ...userSession, ...updatedData };
                     localStorage.setItem('user', JSON.stringify(updatedUser));
                     window.location.href = 'profile.html';
                 } else {
@@ -505,10 +600,11 @@
         function logout() {
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
-            window.location.href = 'index.html';
+            window.location.replace('login.html');
         }
 
         fetchProfile();
     </script>
 </body>
+
 </html>

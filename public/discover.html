@@ -1,73 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discover - Sponsorly</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Discover | Sponsorly</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #d20f39;
-            --primary-dark: #b00d33;
-            --secondary: #f8f9fa;
-            --secondary-dark: #e9ecef;
-            --dark-bg: #1a1a1a;
-            --dark-surface: #2d2d2d;
-            --dark-border: #404040;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a0;
-        }
+        /* Discover-specific styles */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--dark-bg);
-            color: var(--text-primary);
-            min-height: 100vh;
-        }
-
-        .navbar {
-            background: var(--dark-surface);
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--dark-border);
-        }
-        
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-        
-        .nav-links a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-        
         .hamburger {
             display: none;
             flex-direction: column;
@@ -76,63 +18,25 @@
             cursor: pointer;
             padding: 0.5rem;
         }
-        
+
         .hamburger span {
             width: 25px;
             height: 3px;
-            background: var(--text-primary);
+            background: var(--secondary-color);
             margin: 3px 0;
             transition: 0.3s;
         }
-        
+
         .hamburger.active span:nth-child(1) {
             transform: rotate(-45deg) translate(-5px, 6px);
         }
-        
+
         .hamburger.active span:nth-child(2) {
             opacity: 0;
         }
-        
+
         .hamburger.active span:nth-child(3) {
             transform: rotate(45deg) translate(-5px, -6px);
-        }
-        
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: var(--dark-surface);
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                padding-top: 2rem;
-                transition: 0.3s;
-                border-bottom: 1px solid var(--dark-border);
-            }
-            
-            .nav-links.active {
-                left: 0;
-            }
-            
-            .nav-links li {
-                margin: 1rem 0;
-            }
-            
-            .nav-links a {
-                font-size: 1.2rem;
-                padding: 0.5rem 1rem;
-            }
-            
-            .navbar .container {
-                padding: 0 1rem;
-            }
         }
 
         .container {
@@ -148,11 +52,11 @@
         }
 
         .filters {
-            background: var(--dark-surface);
+            background: var(--bg-color);
             padding: 1.5rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            border: 1px solid var(--dark-border);
+            border: 1px solid var(--caffeine-border);
         }
 
         .filter-group {
@@ -167,9 +71,9 @@
         }
 
         .filter-group select {
-            background: var(--dark-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--dark-border);
+            background: var(--light-gray);
+            color: var(--text-color);
+            border: 1px solid var(--caffeine-border);
             padding: 0.5rem 1rem;
             border-radius: 8px;
             font-size: 1rem;
@@ -182,15 +86,16 @@
         }
 
         .user-card {
-            background: var(--dark-surface);
-            border: 1px solid var(--dark-border);
+            background: var(--bg-color);
+            border: 1px solid var(--caffeine-border);
             border-radius: 12px;
             padding: 1.5rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .user-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
 
         .user-header {
@@ -202,11 +107,11 @@
 
         .user-header h3 {
             font-size: 1.3rem;
-            color: var(--text-primary);
+            color: var(--text-color);
         }
 
         .user-role {
-            background: var(--primary);
+            background: var(--primary-color);
             color: white;
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
@@ -215,7 +120,7 @@
         }
 
         .user-email {
-            color: var(--text-secondary);
+            color: var(--secondary-color);
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
@@ -227,7 +132,11 @@
             line-height: 1.4;
         }
 
-        .user-location, .user-platform, .user-followers, .user-company, .user-budget {
+        .user-location,
+        .user-platform,
+        .user-followers,
+        .user-company,
+        .user-budget {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 0.3rem;
@@ -240,7 +149,7 @@
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: var(--primary-color);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -253,7 +162,7 @@
         }
 
         .btn-primary:hover {
-            background: var(--primary-dark);
+            opacity: 0.9;
             transform: translateY(-2px);
         }
 
@@ -279,8 +188,148 @@
         .no-users {
             text-align: center;
             padding: 3rem;
-            color: var(--text-secondary);
+            color: var(--secondary-color);
             font-size: 1.1rem;
+        }
+
+        /* Email Service Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-color);
+            border: 1px solid var(--caffeine-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        [data-theme="dark"] .modal-content {
+            background: var(--dark-surface);
+            border-color: var(--dark-border);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .email-service-option {
+            background: var(--light-gray);
+            border: 1px solid var(--caffeine-border);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        [data-theme="dark"] .email-service-option {
+            background: var(--dark-bg);
+            border-color: var(--dark-border);
+        }
+
+        .email-service-option:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .service-icon {
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: var(--light-gray);
+            color: var(--text-color);
+            border: 1px solid var(--caffeine-border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        [data-theme="dark"] .modal-close {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        .modal-close:hover {
+            background: var(--secondary-dark);
+        }
+
+        [data-theme="dark"] .modal-close:hover {
+            background: var(--dark-border);
+        }
+
+        /* Dark mode support */
+        [data-theme="dark"] .filters {
+            background: var(--dark-surface);
+            border-color: var(--dark-border);
+        }
+
+        [data-theme="dark"] .filter-group select {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        [data-theme="dark"] .user-card {
+            background: var(--dark-surface);
+            border-color: var(--dark-border);
+        }
+
+        [data-theme="dark"] .user-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .user-header h3 {
+            color: var(--dark-text);
+        }
+
+        [data-theme="dark"] .user-email,
+        [data-theme="dark"] .user-bio,
+        [data-theme="dark"] .user-location,
+        [data-theme="dark"] .user-platform,
+        [data-theme="dark"] .user-followers,
+        [data-theme="dark"] .user-company,
+        [data-theme="dark"] .user-budget {
+            color: var(--dark-secondary-text);
+        }
+
+        [data-theme="dark"] .no-users {
+            color: var(--dark-secondary-text);
+        }
+
+        [data-theme="dark"] .nav-links a {
+            color: var(--dark-secondary-text);
+        }
+
+        [data-theme="dark"] .nav-links a:hover {
+            color: var(--primary-color);
         }
 
         @media (max-width: 768px) {
@@ -289,19 +338,19 @@
                 gap: 1rem;
                 padding: 1rem;
             }
-            
+
             .nav-links {
                 gap: 1rem;
             }
-            
+
             .container {
                 padding: 0 1rem;
             }
-            
+
             .users-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .filter-group {
                 flex-direction: column;
                 align-items: stretch;
@@ -309,6 +358,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
@@ -316,7 +366,6 @@
             <ul class="nav-links">
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="discover.html">Discover</a></li>
-                <li><a href="messages.html">Messages</a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
@@ -330,7 +379,7 @@
 
     <main class="container">
         <h1 class="section-title">Discover Creators & Sponsors</h1>
-        
+
         <div class="filters">
             <div class="filter-group">
                 <label for="role-filter">Looking for:</label>
@@ -346,13 +395,80 @@
         </div>
     </main>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact Support</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Email Service Selection Modal -->
+    <div class="modal-overlay" id="emailModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Choose Email Service</h2>
+            <div class="email-service-option" onclick="openEmailService('gmail')">
+                <span class="service-icon">📧</span>
+                <span>Gmail</span>
+            </div>
+            <div class="email-service-option" onclick="openEmailService('outlook')">
+                <span class="service-icon">📨</span>
+                <span>Outlook</span>
+            </div>
+            <div class="email-service-option" onclick="openEmailService('yahoo')">
+                <span class="service-icon">✉️</span>
+                <span>Yahoo Mail</span>
+            </div>
+            <button class="modal-close" onclick="closeEmailModal()">Cancel</button>
+        </div>
+    </div>
+
     <script>
+        // Prevent bfcache restoration after logout
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted || (performance.getEntriesByType('navigation')[0] && performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    window.location.replace('login.html');
+                }
+            }
+        });
+
+        // Hamburger menu functionality
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                }
+            });
+        }
+
         let allUsers = [];
         let currentUser = null;
 
         // Get current user from token
         async function getCurrentUser() {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('access_token');
             if (!token) {
                 window.location.href = 'login.html';
                 return;
@@ -361,24 +477,35 @@
             try {
                 const payload = JSON.parse(atob(token.split('.')[1]));
                 currentUser = payload;
+
+                // Set default dropdown value based on user role
+                const roleFilter = document.getElementById('role-filter');
+                if (currentUser.role === 'creator') {
+                    roleFilter.value = 'sponsor'; // Creators want to find sponsors
+                } else {
+                    roleFilter.value = 'creator'; // Sponsors want to find creators
+                }
+
                 loadUsers();
             } catch (error) {
                 console.error('Invalid token:', error);
-                localStorage.removeItem('token');
+                localStorage.removeItem('access_token');
                 window.location.href = 'login.html';
             }
         }
 
-        // Load users from API
+        // Load users from API based on selected filter
         async function loadUsers() {
+            const roleFilter = document.getElementById('role-filter').value;
+
             try {
-                const response = await fetch('/auth/discover', {
+                const response = await fetch('/auth/discover-same', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
-                    body: JSON.stringify({ role: currentUser.role })
+                    body: JSON.stringify({ role: roleFilter, email: currentUser.email })
                 });
 
                 if (response.ok) {
@@ -392,11 +519,9 @@
             }
         }
 
-        // Filter users by role
+        // Filter users by role - reload from API
         function filterUsers() {
-            const roleFilter = document.getElementById('role-filter').value;
-            const filteredUsers = allUsers.filter(user => user.role === roleFilter);
-            renderUsers(filteredUsers);
+            loadUsers(); // Reload data from API with new filter
         }
 
         // Render users in the grid
@@ -426,35 +551,60 @@
                     ${user.budget ? `<p class="user-budget">Budget: ${user.budget}</p>` : ''}
                     <div class="user-actions">
                         <button class="btn-primary" onclick="connectNow('${user.email}')">Connect Now</button>
-                        <button class="btn-secondary" onclick="directMessage('${user.email}')">DM</button>
                     </div>
                 `;
                 container.appendChild(userCard);
             });
         }
 
-        // Connect Now functionality (opens email client)
+        // Store current email for modal
+        let currentEmail = '';
+
+        // Connect Now functionality (shows email service selector)
         function connectNow(email) {
-            const subject = 'Connection Request from Sponsorly';
-            const body = 'Hello,\n\nI would like to connect with you through Sponsorly.\n\nBest regards';
-            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.open(mailtoLink, '_blank');
+            currentEmail = email;
+            document.getElementById('emailModal').classList.add('active');
         }
 
-        // Direct Message functionality
-        function directMessage(email) {
-            // Redirect to messages page with pre-selected user
-            window.location.href = `messages.html?user=${encodeURIComponent(email)}`;
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('emailModal').classList.remove('active');
         }
+
+        // Open specific email service
+        function openEmailService(service) {
+            const subject = 'Connection Request from Sponsorly';
+            const body = 'Hello,\n\nI would like to connect with you through Sponsorly.\n\nBest regards';
+            let url = '';
+
+            switch (service) {
+                case 'gmail':
+                    url = `https://mail.google.com/mail/?view=cm&fs=1&to=${currentEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    break;
+                case 'outlook':
+                    url = `https://outlook.live.com/mail/0/deeplink/compose?to=${currentEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    break;
+                case 'yahoo':
+                    url = `https://compose.mail.yahoo.com/?to=${currentEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    break;
+            }
+
+            window.open(url, '_blank');
+            closeEmailModal();
+        }
+
+
 
         // Logout functionality
         function logout() {
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
+            localStorage.removeItem('user');
+            localStorage.removeItem('access_token');
+            window.location.replace('login.html');
         }
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', getCurrentUser);
     </script>
 </body>
+
 </html>

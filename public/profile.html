@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -13,6 +14,7 @@
             background-color: var(--light-gray);
             min-height: calc(100vh - 80px);
         }
+
         .profile-card {
             background: var(--bg-color);
             padding: 3rem;
@@ -22,6 +24,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         .profile-header {
             display: flex;
             align-items: center;
@@ -30,6 +33,7 @@
             border-bottom: 1px solid var(--caffeine-border);
             padding-bottom: 2rem;
         }
+
         .profile-avatar {
             width: 100px;
             height: 100px;
@@ -42,10 +46,12 @@
             font-size: 2.5rem;
             font-weight: 700;
         }
+
         .profile-info h1 {
             margin: 0;
             font-size: 2rem;
         }
+
         .profile-role {
             display: inline-block;
             padding: 0.25rem 0.75rem;
@@ -57,244 +63,308 @@
             margin-top: 0.5rem;
             text-transform: capitalize;
         }
+
         .detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
         }
-        .detail-item {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--caffeine-border);
-            background: var(--light-gray);
-        }
-        .detail-label {
-            font-size: 0.875rem;
-            color: var(--secondary-color);
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-        }
-        .detail-value {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-        .full-width {
-            grid-column: span 2;
-        }
-        .connect-btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 1rem;
-            transition: opacity 0.2s;
-        }
+
+
         .connect-btn:hover {
             opacity: 0.9;
         }
-        
+
         /* Dark mode styles for profile */
         [data-theme="dark"] .profile-section {
             background-color: var(--dark-surface);
         }
-        
+
         [data-theme="dark"] .profile-card {
             background: var(--dark-surface);
             color: var(--dark-text);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .detail-item {
             background: var(--dark-surface);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .profile-header {
             border-bottom: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .profile-role {
             background-color: var(--dark-hover-bg);
             color: var(--primary-color);
         }
-        
+
         [data-theme="dark"] .detail-label {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .detail-value {
             color: var(--dark-text);
         }
-        
+
         [data-theme="dark"] .nav-links a {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .nav-links a:hover {
             color: var(--primary-color);
         }
-        
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .profile-section {
                 padding: 0.75rem 0;
                 min-height: 100vh;
             }
-            
+
             .profile-card {
                 padding: 1.5rem;
                 margin: 0 0.75rem;
             }
-            
+
             .profile-header {
                 flex-direction: column;
                 text-align: center;
                 gap: 0.75rem;
             }
-            
+
             .profile-avatar {
                 width: 70px;
                 height: 70px;
                 font-size: 1.8rem;
                 margin: 0 auto;
             }
-            
+
             .profile-info h1 {
                 font-size: 1.3rem;
                 margin: 0.25rem 0;
             }
-            
+
             .profile-role {
                 font-size: 0.8rem;
                 padding: 0.25rem 0.75rem;
             }
-            
+
             .btn-secondary {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.8rem;
                 margin-top: 0.75rem;
             }
-            
+
             .connect-btn {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.8rem;
                 margin-top: 0.75rem;
             }
-            
+
             .detail-grid {
                 grid-template-columns: 1fr;
                 gap: 0.75rem;
             }
-            
+
             .detail-item {
                 padding: 0.6rem;
             }
-            
+
             .detail-label {
                 font-size: 0.75rem;
                 margin-bottom: 0.25rem;
             }
-            
+
             .detail-value {
                 font-size: 0.9rem;
                 line-height: 1.4;
             }
-            
+
             .detail-value a {
                 font-size: 0.85rem;
                 margin-right: 1rem;
             }
-            
+
             .navbar {
                 padding: 0.5rem 0;
             }
-            
+
             .navbar .container {
                 flex-direction: column;
                 gap: 0.75rem;
             }
-            
+
             .logo {
                 font-size: 1.2rem;
                 text-align: center;
             }
-            
+
             .nav-links {
                 justify-content: center;
                 flex-wrap: wrap;
                 gap: 0.5rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.85rem;
                 padding: 0.4rem 0.7rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .profile-section {
                 padding: 0.5rem 0;
             }
-            
+
             .profile-card {
                 padding: 1.25rem;
                 margin: 0 0.5rem;
             }
-            
+
             .profile-avatar {
                 width: 60px;
                 height: 60px;
                 font-size: 1.5rem;
             }
-            
+
             .profile-info h1 {
                 font-size: 1.1rem;
             }
-            
+
             .profile-role {
                 font-size: 0.7rem;
                 padding: 0.2rem 0.6rem;
             }
-            
+
             .btn-secondary {
                 font-size: 0.8rem;
                 padding: 0.35rem 0.7rem;
             }
-            
+
             .connect-btn {
                 font-size: 0.8rem;
                 padding: 0.35rem 0.7rem;
             }
-            
+
             .detail-item {
                 padding: 0.5rem;
             }
-            
+
             .detail-label {
                 font-size: 0.7rem;
             }
-            
+
             .detail-value {
                 font-size: 0.8rem;
             }
-            
+
             .detail-value a {
                 font-size: 0.75rem;
                 margin-right: 0.75rem;
             }
-            
+
             .nav-links a {
                 font-size: 0.8rem;
                 padding: 0.35rem 0.6rem;
             }
         }
+
+        /* Email Service Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-color);
+            border: 1px solid var(--caffeine-border);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        [data-theme="dark"] .modal-content {
+            background: var(--dark-surface);
+            border-color: var(--dark-border);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .email-service-option {
+            background: var(--light-gray);
+            border: 1px solid var(--caffeine-border);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        [data-theme="dark"] .email-service-option {
+            background: var(--dark-bg);
+            border-color: var(--dark-border);
+        }
+
+        .email-service-option:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .service-icon {
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: var(--light-gray);
+            color: var(--text-color);
+            border: 1px solid var(--caffeine-border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+        [data-theme="dark"] .modal-close {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: var(--dark-border);
+        }
+
+        .modal-close:hover {
+            background: var(--secondary-dark);
+        }
+
+        [data-theme="dark"] .modal-close:hover {
+            background: var(--dark-border);
+        }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
@@ -331,17 +401,65 @@
         </div>
     </div>
 
+    <!-- Email Service Selection Modal -->
+    <div class="modal-overlay" id="emailModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Choose Email Service</h2>
+            <div class="email-service-option" onclick="openEmailService('gmail')">
+                <span class="service-icon">📧</span>
+                <span>Gmail</span>
+            </div>
+            <div class="email-service-option" onclick="openEmailService('outlook')">
+                <span class="service-icon">📨</span>
+                <span>Outlook</span>
+            </div>
+            <div class="email-service-option" onclick="openEmailService('yahoo')">
+                <span class="service-icon">✉️</span>
+                <span>Yahoo Mail</span>
+            </div>
+            <button class="modal-close" onclick="closeEmailModal()">Cancel</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact Support</a>
+                </div>
+                <div class="footer-socials">
+                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script>
+        // Prevent bfcache restoration after logout
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted || (performance.getEntriesByType('navigation')[0] &&
+                performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    window.location.replace('login.html');
+                }
+            }
+        });
         // Hamburger menu functionality
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.querySelector('.nav-links');
-        
+
         if (hamburger && navLinks) {
             hamburger.addEventListener('click', () => {
                 hamburger.classList.toggle('active');
                 navLinks.classList.toggle('active');
             });
-            
+
             // Close menu when clicking on a link
             document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', () => {
@@ -349,7 +467,7 @@
                     navLinks.classList.remove('active');
                 });
             });
-            
+
             // Close menu when clicking outside
             document.addEventListener('click', (e) => {
                 if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
@@ -358,7 +476,7 @@
                 }
             });
         }
-        
+
         const userSession = JSON.parse(localStorage.getItem('user'));
         if (!userSession) {
             window.location.href = 'login.html';
@@ -371,7 +489,7 @@
             try {
                 const res = await fetch('/auth/profile', {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
@@ -382,7 +500,7 @@
                     return;
                 }
                 const user = await res.json();
-                
+
                 if (res.ok) {
                     displayProfile(user);
                 } else {
@@ -402,8 +520,9 @@
             const profileActions = document.getElementById('profile-actions');
             if (user.email === userSession.email) {
                 profileActions.innerHTML = `
-                    <a href="edit-profile.html" class="btn btn-secondary" style="margin-right: 1rem; display: inline-block; margin-top: 1rem;">Edit Profile</a>
-                `;
+    <a href="edit-profile.html" class="btn btn-secondary"
+        style="margin-right: 1rem; display: inline-block; margin-top: 1rem;">Edit Profile</a>
+    `;
             } else {
                 profileActions.innerHTML = '';
             }
@@ -411,8 +530,9 @@
             // Add Connect Now button if viewing someone else
             if (user.email !== userSession.email) {
                 document.getElementById('connect-container').innerHTML = `
-                    <a href="mailto:${user.email}?subject=Sponsorship Inquiry from Sponsorly" class="connect-btn">Connect Now</a>
-                `;
+    <button onclick="connectNow('${user.email}')" class="connect-btn" style="border: none; cursor: pointer;">Connect
+        Now</button>
+    `;
             } else {
                 document.getElementById('connect-container').innerHTML = '';
             }
@@ -421,73 +541,75 @@
             let linksHtml = '';
             if (user.links && user.links.length > 0) {
                 linksHtml = `
-                    <div class="detail-item full-width">
-                        <div class="detail-label">Links</div>
-                        <div class="detail-value">
-                            ${user.links.map(link => `<a href="${link.url}" target="_blank" style="color: var(--primary-color); margin-right: 1.5rem; text-decoration: none;">${link.label} â†—</a>`).join('')}
-                        </div>
-                    </div>
-                `;
+    <div class="detail-item full-width">
+        <div class="detail-label">Links</div>
+        <div class="detail-value">
+            ${user.links.map(link => `<a href="${link.url}" target="_blank"
+                style="color: var(--primary-color); margin-right: 1.5rem; text-decoration: none;">${link.label}
+                &#8599;</a>`).join('')}
+        </div>
+    </div>
+    `;
             }
 
             let html = `
-                <div class="detail-item">
-                    <div class="detail-label">Email Address</div>
-                    <div class="detail-value">${user.email}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Location</div>
-                    <div class="detail-value">${user.location}</div>
-                </div>
-                <div class="detail-item full-width">
-                    <div class="detail-label">Bio</div>
-                    <div class="detail-value">${user.bio || 'No bio provided.'}</div>
-                </div>
-                ${linksHtml}
-            `;
+    <div class="detail-item">
+        <div class="detail-label">Email Address</div>
+        <div class="detail-value">${user.email}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Location</div>
+        <div class="detail-value">${user.location}</div>
+    </div>
+    <div class="detail-item full-width">
+        <div class="detail-label">Bio</div>
+        <div class="detail-value">${user.bio || 'No bio provided.'}</div>
+    </div>
+    ${linksHtml}
+    `;
 
             if (user.role === 'creator') {
                 html += `
-                    <div class="detail-item">
-                        <div class="detail-label">Platform</div>
-                        <div class="detail-value">${user.platform}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Handle</div>
-                        <div class="detail-value">${user.handle}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Followers</div>
-                        <div class="detail-value">${Number(user.followers).toLocaleString()}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Audience Reach</div>
-                        <div class="detail-value">${user.audienceReach}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Date of Birth</div>
-                        <div class="detail-value">${new Date(user.dob).toLocaleDateString()}</div>
-                    </div>
-                `;
+    <div class="detail-item">
+        <div class="detail-label">Platform</div>
+        <div class="detail-value">${user.platform}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Handle</div>
+        <div class="detail-value">${user.handle}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Followers</div>
+        <div class="detail-value">${Number(user.followers).toLocaleString()}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Audience Reach</div>
+        <div class="detail-value">${user.audienceReach}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Date of Birth</div>
+        <div class="detail-value">${new Date(user.dob).toLocaleDateString()}</div>
+    </div>
+    `;
             } else {
                 html += `
-                    <div class="detail-item">
-                        <div class="detail-label">Company Name</div>
-                        <div class="detail-value">${user.companyName}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Team Size</div>
-                        <div class="detail-value">${user.noOfEmployees} employees</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Monthly Budget</div>
-                        <div class="detail-value">${user.budget}</div>
-                    </div>
-                    <div class="detail-item full-width">
-                        <div class="detail-label">Collaboration Requirements</div>
-                        <div class="detail-value">${user.requirements || 'None specified.'}</div>
-                    </div>
-                `;
+    <div class="detail-item">
+        <div class="detail-label">Company Name</div>
+        <div class="detail-value">${user.companyName}</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Team Size</div>
+        <div class="detail-value">${user.noOfEmployees} employees</div>
+    </div>
+    <div class="detail-item">
+        <div class="detail-label">Monthly Budget</div>
+        <div class="detail-value">${user.budget}</div>
+    </div>
+    <div class="detail-item full-width">
+        <div class="detail-label">Collaboration Requirements</div>
+        <div class="detail-value">${user.requirements || 'None specified.'}</div>
+    </div>
+    `;
             }
 
             grid.innerHTML = html;
@@ -496,10 +618,50 @@
         function logout() {
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
-            window.location.href = 'index.html';
+            window.location.replace('login.html');
+        }
+
+        // Store current email for modal
+        let currentEmail = '';
+
+        // Connect Now functionality (shows email service selector)
+        function connectNow(email) {
+            currentEmail = email;
+            document.getElementById('emailModal').classList.add('active');
+        }
+
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('emailModal').classList.remove('active');
+        }
+
+        // Open specific email service
+        function openEmailService(service) {
+            const subject = 'Sponsorship Inquiry from Sponsorly';
+            const body = 'Hello,\n\nI would like to connect with you through Sponsorly.\n\nBest regards';
+            let url = '';
+
+            switch (service) {
+                case 'gmail':
+                    url =
+                        `https://mail.google.com/mail/?view=cm&fs=1&to=${currentEmail}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    break;
+                case 'outlook':
+                    url =
+                        `https://outlook.live.com/mail/0/deeplink/compose?to=${currentEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    break;
+                case 'yahoo':
+                    url =
+                        `https://compose.mail.yahoo.com/?to=${currentEmail}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                    break;
+            }
+
+            window.open(url, '_blank');
+            closeEmailModal();
         }
 
         fetchProfile();
     </script>
 </body>
+
 </html>
