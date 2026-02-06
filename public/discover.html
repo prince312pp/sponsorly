@@ -365,9 +365,15 @@
             <div class="filter-group">
                 <label for="role-filter">Looking for:</label>
                 <select id="role-filter" onchange="filterUsers()">
+                    <option value="all">All</option>
                     <option value="creator">Creators</option>
                     <option value="sponsor">Sponsors</option>
                 </select>
+            </div>
+            <div class="filter-group" style="flex: 1; min-width: 250px;">
+                <input type="text" id="search-input" placeholder="Search by name, email, platform or bio..."
+                    style="width: 100%; padding: 0.5rem 1rem; border: 1px solid var(--caffeine-border); border-radius: 8px; background: var(--light-gray); color: var(--text-color);"
+                    oninput="searchUsers()">
             </div>
         </div>
 
@@ -476,6 +482,7 @@
 
                 if (response.ok) {
                     allUsers = await response.json();
+                    console.log(`Loaded ${allUsers.length} users for filter: ${roleFilter}`);
                     renderUsers(allUsers);
                 } else {
                     console.error('Failed to load users');
@@ -488,6 +495,31 @@
         // Filter users by role - reload from API
         function filterUsers() {
             loadUsers(); // Reload data from API with new filter
+        }
+
+        // Search users locally in already loaded data
+        function searchUsers() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!query) {
+                renderUsers(allUsers);
+                return;
+            }
+
+            const filtered = allUsers.filter(u => {
+                const fullName = `${u.firstName} ${u.lastName}`.toLowerCase();
+                const email = u.email.toLowerCase();
+                const bio = (u.bio || '').toLowerCase();
+                const platform = (u.platform || '').toLowerCase();
+                const company = (u.companyName || '').toLowerCase();
+
+                return fullName.includes(query) ||
+                    email.includes(query) ||
+                    bio.includes(query) ||
+                    platform.includes(query) ||
+                    company.includes(query);
+            });
+
+            renderUsers(filtered);
         }
 
         // Render users in the grid

@@ -516,7 +516,8 @@
 
         function renderCards(items) {
             const grid = document.getElementById('discovery-grid');
-            grid.innerHTML = items.map(item => `
+            // Show only first 9 items
+            grid.innerHTML = items.slice(0, 9).map(item => `
     <div class="card" onclick="window.location.href='profile.html?email=${item.email}'" style="cursor: pointer;">
         <div class="avatar">${item.firstName[0]}</div>
         <div class="info">

@@ -22,7 +22,7 @@ export class AuthService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private configService: ConfigService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   /* -------------------------------- REGISTER -------------------------------- */
 
@@ -186,8 +186,7 @@ export class AuthService {
       .find({ role: targetRole, verified: true })
       .select(
         'firstName lastName email platform followers budget companyName role bio location',
-      )
-      .limit(20);
+      );
   }
 
   async discoverSame(role: string, email: string) {
@@ -195,11 +194,17 @@ export class AuthService {
       throw new BadRequestException('Role and email are required');
     }
 
+    const query: any = { verified: true, email: { $ne: email } };
+    if (role && role !== 'all') {
+      query.role = role;
+    }
+
+    this.logger.log(`Discovering users with query: ${JSON.stringify(query)}`);
+
     return this.userModel
-      .find({ role, verified: true, email: { $ne: email } })
+      .find(query)
       .select(
         'firstName lastName email platform followers budget companyName role bio location',
-      )
-      .limit(20);
+      );
   }
 }
