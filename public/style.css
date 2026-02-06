@@ -122,80 +122,7 @@ body {
     width: 100%;
 }
 
-/* Hamburger Menu */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    z-index: 1001;
-}
-
-.hamburger span {
-    width: 25px;
-    height: 3px;
-    background: var(--secondary-color);
-    margin: 3px 0;
-    border-radius: 3px;
-}
-
-.hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -6px);
-}
-
-[data-theme="dark"] .nav-links a {
-    color: var(--dark-secondary-text);
-}
-
-[data-theme="dark"] .nav-links a:hover {
-    color: var(--primary-color);
-}
-
-.nav-auth {
-    margin-right: 1rem;
-}
-
-.btn-signin {
-    background: var(--primary-color);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s;
-}
-
-.btn-signin:hover {
-    background: #b40d31;
-}
-
-.profile-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--dark-surface);
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.profile-icon:hover {
-    background-color: var(--dark-border);
-}
-
+/* Global Hamburger Menu */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -215,6 +142,7 @@ body {
     background: var(--text-color);
     border-radius: 10px;
     transform-origin: center;
+    transition: all 0.3s ease;
 }
 
 .hamburger.active span:nth-child(1) {
@@ -768,8 +696,28 @@ body {
     }
 
     /* Mobile Navbar Sliding Menu */
+    .navbar .container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .logo {
+        flex-shrink: 0;
+        margin-right: auto;
+    }
+
+    /* Create a flex container for nav-auth and hamburger */
+    .nav-auth {
+        display: flex;
+        align-items: center;
+        margin-right: 0.5rem;
+        order: 2;
+    }
+
     .hamburger {
         display: flex !important;
+        order: 3;
     }
 
     .nav-links {

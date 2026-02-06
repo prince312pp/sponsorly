@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -8,16 +9,35 @@
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#how-it-works">How it Works</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="login.html" class="btn-signin">Sign In</a>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
     <div class="auth-container">
         <div class="auth-card">
             <div class="logo"><a href="index.html">Sponsorly</a></div>
             <h1>Join as Creator</h1>
             <p>Start landing brand collaborations today.</p>
-            
+
             <form id="creator-form">
                 <input type="hidden" name="role" value="creator">
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>First Name</label>
@@ -41,13 +61,15 @@
                     </div>
                     <div class="form-group">
                         <label>Confirm Password</label>
-                        <input type="password" name="confirmPassword" required placeholder="Confirm Password" autocomplete="off">
+                        <input type="password" name="confirmPassword" required placeholder="Confirm Password"
+                            autocomplete="off">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Bio</label>
-                    <textarea name="bio" rows="3" placeholder="Tell us about yourself and your content..." autocomplete="off"></textarea>
+                    <textarea name="bio" rows="3" placeholder="Tell us about yourself and your content..."
+                        autocomplete="off"></textarea>
                 </div>
 
                 <div class="form-row">
@@ -110,7 +132,8 @@
                         <div class="link-row">
                             <input type="text" placeholder="Label (e.g. Website)" class="link-label" autocomplete="off">
                             <input type="url" placeholder="URL (https://...)" class="link-url" autocomplete="off">
-                            <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">&times;</button>
+                            <button type="button" class="btn-remove-link"
+                                onclick="this.parentElement.remove()">&times;</button>
                         </div>
                     </div>
                 </div>
@@ -121,7 +144,31 @@
         </div>
     </div>
 
+    <script src="js/navbar.js"></script>
     <script>
+        // Function to add protocol to URL if missing
+        function ensureProtocol(url) {
+            if (!url || url.trim() === '') return '';
+            url = url.trim();
+            // Check if protocol is already present
+            if (!/^https?:\/\//i.test(url)) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+
+        // Add protocol formatting to existing URL inputs
+        function attachUrlFormatting() {
+            document.querySelectorAll('.link-url').forEach(input => {
+                input.addEventListener('blur', function () {
+                    this.value = ensureProtocol(this.value);
+                });
+            });
+        }
+
+        // Initial attachment for existing inputs
+        attachUrlFormatting();
+
         document.getElementById('add-link').addEventListener('click', () => {
             const container = document.getElementById('links-container');
             const row = document.createElement('div');
@@ -132,18 +179,20 @@
                 <button type="button" class="btn-remove-link" onclick="this.parentElement.remove()">&times;</button>
             `;
             container.appendChild(row);
+            // Attach formatting to newly added URL input
+            attachUrlFormatting();
         });
 
         document.getElementById('creator-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
-            
-            // Collect dynamic links
+
+            // Collect dynamic links and ensure protocols
             const linkRows = document.querySelectorAll('.link-row');
             data.links = Array.from(linkRows).map(row => ({
                 label: row.querySelector('.link-label').value,
-                url: row.querySelector('.link-url').value
+                url: ensureProtocol(row.querySelector('.link-url').value)
             })).filter(link => link.label && link.url);
 
             try {
@@ -165,4 +214,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -8,12 +9,18 @@
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#how-it-works">How it Works</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
             <div class="nav-auth">
-                <a href="#" class="btn-signin" onclick="window.location.href='login.html'">Sign In</a>
+                <a href="login.html" class="btn-signin">Sign In</a>
             </div>
             <button class="hamburger" id="hamburger">
                 <span></span>
@@ -27,23 +34,27 @@
         <div class="auth-card" style="margin: 0 auto; max-width: 800px;">
             <h1>Privacy Policy</h1>
             <p style="margin-bottom: 2rem; color: var(--secondary-color);">Last updated: January 29, 2026</p>
-            
+
             <div style="text-align: left; line-height: 1.6;">
                 <h2>1. Information We Collect</h2>
-                <p>We collect information you provide directly to us, such as when you create an account, complete your profile, or communicate with us.</p>
-                
+                <p>We collect information you provide directly to us, such as when you create an account, complete your
+                    profile, or communicate with us.</p>
+
                 <h2>2. How We Use Your Information</h2>
-                <p>We use your information to provide and improve our services, connect sponsors with creators, and send important account notifications.</p>
-                
+                <p>We use your information to provide and improve our services, connect sponsors with creators, and send
+                    important account notifications.</p>
+
                 <h2>3. Information Sharing</h2>
-                <p>We do not sell or rent your personal information. Profile information is only shared with other users when necessary for collaboration purposes.</p>
-                
+                <p>We do not sell or rent your personal information. Profile information is only shared with other users
+                    when necessary for collaboration purposes.</p>
+
                 <h2>4. Data Security</h2>
-                <p>We implement reasonable security measures to protect your personal information. However, no method of transmission is 100% secure.</p>
-                
+                <p>We implement reasonable security measures to protect your personal information. However, no method of
+                    transmission is 100% secure.</p>
+
                 <h2>5. Your Rights</h2>
                 <p>You may update or delete your account information at any time through your profile settings.</p>
-                
+
                 <h2>6. Contact Us</h2>
                 <p>If you have questions about this Privacy Policy, please contact us at support@sponsorly.com</p>
             </div>
@@ -68,32 +79,10 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
     <script>
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        
-        if (hamburger) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                window.location.href = 'index.html';
-            });
-        }
-        
-        // Handle authenticated user
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            const navAuth = document.querySelector('.nav-auth');
-            if (navAuth) {
-                navAuth.innerHTML = `
-                    <a href="profile.html" class="profile-icon" title="My Profile">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </a>
-                `;
-            }
-        }
+        // Handle authenticated user (navbar.js handles mostly)
     </script>
 </body>
+
 </html>

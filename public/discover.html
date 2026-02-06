@@ -10,34 +10,7 @@
     <style>
         /* Discover-specific styles */
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
 
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--secondary-color);
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
 
         .container {
             max-width: 1200px;
@@ -81,7 +54,7 @@
 
         .users-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
         }
 
@@ -332,6 +305,14 @@
             color: var(--primary-color);
         }
 
+        /* Tablet: 2 columns */
+        @media (max-width: 1024px) {
+            .users-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Mobile: 1 column */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -433,7 +414,9 @@
         </div>
     </div>
 
+    <script src="js/navbar.js"></script>
     <script>
+        // Use shared navbar.js for hamburger/nav logic
         // Prevent bfcache restoration after logout
         window.addEventListener('pageshow', function (event) {
             if (event.persisted || (performance.getEntriesByType('navigation')[0] && performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
@@ -444,24 +427,7 @@
             }
         });
 
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.querySelector('.nav-links');
 
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                }
-            });
-        }
 
         let allUsers = [];
         let currentUser = null;

@@ -109,7 +109,7 @@
 
         .discovery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
@@ -207,6 +207,13 @@
 
         [data-theme="dark"] .nav-links a:hover {
             color: var(--primary-color);
+        }
+
+        /* Tablet: 2 columns */
+        @media (max-width: 1024px) {
+            .discovery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         /* Mobile Responsive Styles */
@@ -363,6 +370,39 @@
                 padding: 0.35rem 0.6rem;
             }
         }
+
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        @media (min-width: 769px) {
+            .dashboard-container {
+                width: 50%;
+                max-width: 700px;
+                margin: 2rem auto !important;
+                border: 1px solid var(--caffeine-border);
+                border-radius: 12px;
+                padding: 3rem !important;
+                background: var(--bg-color);
+            }
+
+            .discovery-section {
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto !important;
+            }
+
+            .discovery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        [data-theme="dark"] .dashboard-container {
+            background: var(--dark-surface);
+            border-color: var(--dark-border);
+        }
     </style>
 </head>
 
@@ -382,20 +422,22 @@
             </button>
         </div>
     </nav>
-    <div class="dashboard-container" style="height: auto; min-height: 200px; padding: 4rem 0;">
-        <div class="dashboard-card">
-            <h1 id="welcome-msg">Loading...</h1>
-            <p id="role-msg"></p>
+    <div class="main-content-wrapper">
+        <div class="dashboard-container" style="height: auto; min-height: 200px; padding: 4rem 0;">
+            <div class="dashboard-card">
+                <h1 id="welcome-msg">Loading...</h1>
+                <p id="role-msg"></p>
+            </div>
         </div>
-    </div>
 
-    <div class="discovery-section">
-        <div class="section-header">
-            <h2 id="discovery-title">Recommended for You</h2>
-            <a href="discover.html" class="view-all">View All</a>
-        </div>
-        <div id="discovery-grid" class="discovery-grid">
-            <!-- Dynamic cards will appear here -->
+        <div class="discovery-section">
+            <div class="section-header">
+                <h2 id="discovery-title">Recommended for You</h2>
+                <a href="discover.html" class="view-all">View All</a>
+            </div>
+            <div id="discovery-grid" class="discovery-grid">
+                <!-- Dynamic cards will appear here -->
+            </div>
         </div>
     </div>
 
@@ -428,32 +470,10 @@
                 }
             }
         });
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
-
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                });
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                }
-            });
-        }
+    </script>
+    <script src="js/navbar.js"></script>
+    <script>
+        // Use shared navbar.js for hamburger/nav logic
 
         const user = JSON.parse(localStorage.getItem('user'));
 

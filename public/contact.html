@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -8,95 +9,99 @@
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .contact-section { padding: 4rem 0; background-color: var(--light-gray); min-height: calc(100vh - 80px); }
-        
+        .contact-section {
+            padding: 4rem 0;
+            background-color: var(--light-gray);
+            min-height: calc(100vh - 80px);
+        }
+
         /* Dark mode styles for contact */
         [data-theme="dark"] .contact-section {
             background-color: var(--dark-surface);
         }
-        
+
         [data-theme="dark"] .auth-card {
             background: var(--dark-surface);
             color: var(--dark-text);
         }
-        
+
         [data-theme="dark"] .auth-card p {
             color: var(--dark-secondary-text);
         }
-        
+
         [data-theme="dark"] .form-group input,
         [data-theme="dark"] .form-group textarea {
             background: var(--dark-bg);
             color: var(--dark-text);
             border: 1px solid var(--dark-border);
         }
-        
+
         [data-theme="dark"] .form-group input::placeholder,
         [data-theme="dark"] .form-group textarea::placeholder {
             color: var(--dark-secondary-text);
         }
-        
+
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
             .contact-section {
                 padding: 2rem 0;
             }
-            
+
             .auth-card {
                 padding: 2rem;
                 margin: 0 1rem;
             }
-            
+
             .auth-card h1 {
                 font-size: 1.5rem;
                 text-align: center;
             }
-            
+
             .auth-card p {
                 font-size: 0.9rem;
                 text-align: center;
             }
-            
+
             .form-group {
                 margin-bottom: 1rem;
             }
-            
+
             .form-group input,
             .form-group textarea {
                 padding: 0.6rem;
                 font-size: 1rem;
             }
-            
+
             .btn-block {
                 padding: 0.75rem;
                 font-size: 1rem;
             }
         }
-        
+
         @media (max-width: 480px) {
             .contact-section {
                 padding: 1rem 0;
             }
-            
+
             .auth-card {
                 padding: 1.5rem;
                 margin: 0 0.5rem;
             }
-            
+
             .auth-card h1 {
                 font-size: 1.25rem;
             }
-            
+
             .auth-card p {
                 font-size: 0.8rem;
             }
-            
+
             .form-group input,
             .form-group textarea {
                 padding: 0.5rem;
                 font-size: 0.9rem;
             }
-            
+
             .btn-block {
                 padding: 0.6rem;
                 font-size: 0.9rem;
@@ -104,12 +109,18 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#how-it-works">How it Works</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
             <div class="nav-auth">
-                <a href="#" class="btn-signin" onclick="window.location.href='login.html'">Sign In</a>
+                <a href="login.html" class="btn-signin">Sign In</a>
             </div>
             <button class="hamburger" id="hamburger">
                 <span></span>
@@ -119,52 +130,31 @@
         </div>
     </nav>
 
+    <script src="js/navbar.js"></script>
     <script>
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        
-        if (hamburger) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                // For contact page, redirect to index
-                window.location.href = 'index.html';
-            });
-        }
-        
-        // Handle authenticated user
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            const navAuth = document.querySelector('.nav-auth');
-            if (navAuth) {
-                navAuth.innerHTML = `
-                    <a href="profile.html" class="profile-icon" title="My Profile">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </a>
-                `;
-            }
-        }
+        // Handle authenticated user (navbar.js handles mostly, but we can keep or remove this)
     </script>
 
     <div class="contact-section">
         <div class="auth-card" style="margin: 0 auto;">
             <h1>Contact Support</h1>
             <p>Have a question or need help? Send us a message.</p>
-            
+
             <form id="contact-form">
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" name="name" id="contact-name" required placeholder="Your Name" autocomplete="off">
+                    <input type="text" name="name" id="contact-name" required placeholder="Your Name"
+                        autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" id="contact-email" required placeholder="your@email.com" autocomplete="off">
+                    <input type="email" name="email" id="contact-email" required placeholder="your@email.com"
+                        autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label>Message</label>
-                    <textarea name="message" id="contact-message" rows="5" required placeholder="How can we help you?"></textarea>
+                    <textarea name="message" id="contact-message" rows="5" required
+                        placeholder="How can we help you?"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Send Message</button>
             </form>
@@ -226,4 +216,5 @@
         });
     </script>
 </body>
+
 </html>

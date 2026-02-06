@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -8,12 +9,18 @@
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
             <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#how-it-works">How it Works</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
             <div class="nav-auth">
-                <a href="#" class="btn-signin" onclick="window.location.href='login.html'">Sign In</a>
+                <a href="login.html" class="btn-signin">Sign In</a>
             </div>
             <button class="hamburger" id="hamburger">
                 <span></span>
@@ -27,29 +34,32 @@
         <div class="auth-card" style="margin: 0 auto; max-width: 800px;">
             <h1>Terms of Service</h1>
             <p style="margin-bottom: 2rem; color: var(--secondary-color);">Last updated: January 29, 2026</p>
-            
+
             <div style="text-align: left; line-height: 1.6;">
                 <h2>1. Acceptance of Terms</h2>
                 <p>By accessing or using Sponsorly, you agree to be bound by these Terms of Service.</p>
-                
+
                 <h2>2. Service Description</h2>
-                <p>Sponsorly is a platform that connects sponsors with content creators for collaboration opportunities.</p>
-                
+                <p>Sponsorly is a platform that connects sponsors with content creators for collaboration opportunities.
+                </p>
+
                 <h2>3. User Accounts</h2>
                 <p>You must provide accurate information when creating an account and keep your credentials secure.</p>
-                
+
                 <h2>4. Prohibited Activities</h2>
-                <p>Users may not engage in spam, harassment, fraudulent activities, or violate intellectual property rights.</p>
-                
+                <p>Users may not engage in spam, harassment, fraudulent activities, or violate intellectual property
+                    rights.</p>
+
                 <h2>5. Content Ownership</h2>
-                <p>You retain ownership of content you post, but grant Sponsorly a license to display and distribute it.</p>
-                
+                <p>You retain ownership of content you post, but grant Sponsorly a license to display and distribute it.
+                </p>
+
                 <h2>6. Termination</h2>
                 <p>We may terminate or suspend your account for violations of these terms.</p>
-                
+
                 <h2>7. Disclaimer</h2>
                 <p>Sponsorly is provided "as is" without warranties of any kind.</p>
-                
+
                 <h2>8. Contact</h2>
                 <p>For questions about these terms, contact us at support@sponsorly.com</p>
             </div>
@@ -74,32 +84,10 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
     <script>
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        
-        if (hamburger) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                window.location.href = 'index.html';
-            });
-        }
-        
-        // Handle authenticated user
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            const navAuth = document.querySelector('.nav-auth');
-            if (navAuth) {
-                navAuth.innerHTML = `
-                    <a href="profile.html" class="profile-icon" title="My Profile">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </a>
-                `;
-            }
-        }
+        // Handle authenticated user (navbar.js handles mostly)
     </script>
 </body>
+
 </html>

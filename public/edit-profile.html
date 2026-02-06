@@ -330,43 +330,10 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
     <script>
+        // Use shared navbar.js for hamburger/nav logic
         // Prevent bfcache restoration after logout
-        window.addEventListener('pageshow', function (event) {
-            if (event.persisted || (performance.getEntriesByType('navigation')[0] &&
-                performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
-                const token = localStorage.getItem('access_token');
-                if (!token) {
-                    window.location.replace('login.html');
-                }
-            }
-        });
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
-
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                });
-            });
-
-            // Close menu when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
-                }
-            });
-        }
 
         const userSession = JSON.parse(localStorage.getItem('user'));
         if (!userSession) {
@@ -404,6 +371,30 @@
 
         let linkCounter = 0;
 
+        // Function to add protocol to URL if missing
+        function ensureProtocol(url) {
+            if (!url || url.trim() === '') return '';
+            url = url.trim();
+            // Check if protocol is already present
+            if (!/^https?:\/\//i.test(url)) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+
+        // Add protocol formatting to URL inputs
+        function attachUrlFormatting() {
+            document.querySelectorAll('input[type="url"], input[name^="link-url-"]').forEach(input => {
+                // Remove existing listener to prevent duplicates
+                input.removeEventListener('blur', handleUrlBlur);
+                input.addEventListener('blur', handleUrlBlur);
+            });
+        }
+
+        function handleUrlBlur(e) {
+            e.target.value = ensureProtocol(e.target.value);
+        }
+
         function addLinkField(label = '', url = '') {
             const container = document.getElementById('links-container');
             const linkDiv = document.createElement('div');
@@ -419,6 +410,8 @@
     `;
             container.appendChild(linkDiv);
             linkCounter++;
+            // Attach formatting to newly added URL input
+            attachUrlFormatting();
         }
 
         function populateForm(user) {
@@ -542,13 +535,13 @@
             const formData = new FormData(e.target);
             const updatedData = Object.fromEntries(formData.entries());
 
-            // Collect all links
+            // Collect all links and ensure protocols
             const links = [];
             const linkItems = document.querySelectorAll('#links-container .link-item');
             linkItems.forEach(item => {
                 const inputs = item.querySelectorAll('input');
                 const label = inputs[0].value.trim();
-                const url = inputs[1].value.trim();
+                const url = ensureProtocol(inputs[1].value.trim());
                 if (label && url) {
                     links.push({ label, url });
                 }

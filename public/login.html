@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
@@ -8,13 +9,32 @@
     <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html#how-it-works">How it Works</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="nav-auth">
+                <a href="login.html" class="btn-signin">Sign In</a>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
     <div class="auth-container">
         <div class="auth-card">
             <div class="logo"><a href="index.html">Sponsorly</a></div>
             <h1>Welcome Back</h1>
             <p>Sign in to manage your sponsorships.</p>
-            
+
             <form id="login-form">
                 <div class="form-group">
                     <label>Email</label>
@@ -26,16 +46,19 @@
                     <input type="password" name="password" required placeholder="password" autocomplete="off">
                 </div>
 
-                <div id="error-message" style="color: #ef4444; font-size: 0.875rem; margin-bottom: 1rem; display: none;"></div>
+                <div id="error-message"
+                    style="color: #ef4444; font-size: 0.875rem; margin-bottom: 1rem; display: none;"></div>
 
                 <button type="submit" class="btn btn-primary btn-block">Sign In</button>
             </form>
             <p class="auth-footer">Don't have an account? <br>
-                <a href="register-creator.html">Join as Creator</a> or <a href="register-sponsor.html">Join as Sponsor</a>
+                <a href="register-creator.html">Join as Creator</a> or <a href="register-sponsor.html">Join as
+                    Sponsor</a>
             </p>
         </div>
     </div>
 
+    <script src="js/navbar.js"></script>
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -44,7 +67,7 @@
 
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
-            
+
             try {
                 const res = await fetch('/auth/login', {
                     method: 'POST',
@@ -52,7 +75,7 @@
                     body: JSON.stringify(data)
                 });
                 const result = await res.json();
-                
+
                 if (res.ok) {
                     if (result.verified === false) {
                         localStorage.setItem('pendingEmail', result.email);
@@ -74,4 +97,5 @@
         });
     </script>
 </body>
+
 </html>

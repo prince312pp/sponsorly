@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar">
         <div class="container">
@@ -32,7 +34,8 @@
     <header class="hero">
         <div class="container">
             <h1>Where Brands Meet the Right Creators</h1>
-            <p class="sub-headline">Sponsorly helps sponsors discover creators and creators land meaningful brand collaborations — simply, transparently, and fast.</p>
+            <p class="sub-headline">Sponsorly helps sponsors discover creators and creators land meaningful brand
+                collaborations — simply, transparently, and fast.</p>
             <div class="hero-ctas">
                 <a href="register-sponsor.html" class="btn btn-primary">Get Started as Sponsor</a>
                 <a href="register-creator.html" class="btn btn-secondary">Join as Creator</a>
@@ -82,7 +85,8 @@
                 </div>
                 <div class="solution">
                     <h3>The Solution</h3>
-                    <p>Sponsorly replaces endless DMs, emails, and agencies with a clean, profile-based sponsorship platform.</p>
+                    <p>Sponsorly replaces endless DMs, emails, and agencies with a clean, profile-based sponsorship
+                        platform.</p>
                     <div class="solution-highlights">
                         <span>Transparent pricing</span>
                         <span>Clear expectations</span>
@@ -97,14 +101,23 @@
         <div class="container">
             <h2>Popular Sponsorship Categories</h2>
             <div class="category-grid">
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Tech</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Fashion</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Fitness</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Gaming</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Music</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Education</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Startups</div>
-                <div class="category-card" style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Local Businesses</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Tech</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Fashion</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Fitness</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Gaming</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Music</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Education</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Startups</div>
+                <div class="category-card"
+                    style="background: var(--dark-surface); border: 1px solid var(--dark-border);">Local Businesses
+                </div>
             </div>
             <p class="niche-text">Find collaborations that actually fit your niche.</p>
         </div>
@@ -162,53 +175,11 @@
         </div>
     </footer>
 
+    <script src="js/navbar.js"></script>
     <script>
-        // Hamburger menu functionality
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('nav-links');
-        
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-        
-        // Close menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-            }
-        });
-        
-        // Handle authenticated user
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            const navAuth = document.querySelector('.nav-auth');
-            if (navAuth) {
-                navAuth.innerHTML = `
-                    <a href="profile.html" class="profile-icon" title="My Profile">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                    </a>
-                `;
-            }
-            
-            // Add Dashboard link to nav-links
-            const navLinks = document.getElementById('nav-links');
-            const dashLi = document.createElement('li');
-            dashLi.innerHTML = '<a href="dashboard.html">Dashboard</a>';
-            navLinks.appendChild(dashLi);
-        }
+        // Handle authenticated user (already handled or reinforced by navbar.js)
+        // Additional page-specific logic can go here
     </script>
 </body>
+
 </html>
