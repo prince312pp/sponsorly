@@ -18,11 +18,10 @@
         }
 
         .dashboard-card {
-            background: var(--bg-color);
-            padding: 3rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--caffeine-border);
+            padding: 2rem;
+            background: none;
+            box-shadow: none;
+            border: none;
         }
 
         h1 {
@@ -36,69 +35,6 @@
             cursor: pointer;
             color: var(--secondary-color);
             text-decoration: underline;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--secondary-color);
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: var(--bg-color);
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                padding-top: 2rem;
-                transition: 0.3s;
-                border-bottom: 1px solid var(--caffeine-border);
-            }
-
-            .nav-links.active {
-                left: 0;
-            }
-
-            .nav-links li {
-                margin: 1rem 0;
-            }
-
-            .nav-links a {
-                font-size: 1.2rem;
-                padding: 0.5rem 1rem;
-            }
         }
 
         .discovery-section {
@@ -169,45 +105,6 @@
             font-weight: 600;
         }
 
-        /* Dark mode styles for dashboard */
-        [data-theme="dark"] .dashboard-container {
-            background-color: var(--dark-surface);
-        }
-
-        [data-theme="dark"] .dashboard-card {
-            background: var(--dark-surface);
-            color: var(--dark-text);
-        }
-
-        [data-theme="dark"] .dashboard-card {
-            border: 1px solid var(--dark-border);
-        }
-
-        [data-theme="dark"] .card {
-            background: var(--dark-surface);
-            color: var(--dark-text);
-            border: 1px solid var(--dark-border);
-        }
-
-        [data-theme="dark"] .card:hover {
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        [data-theme="dark"] .info p {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .view-all {
-            color: var(--primary-color);
-        }
-
-        [data-theme="dark"] .nav-links a {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .nav-links a:hover {
-            color: var(--primary-color);
-        }
 
         /* Tablet: 2 columns */
         @media (max-width: 1024px) {
@@ -398,35 +295,28 @@
                 grid-template-columns: repeat(3, 1fr);
             }
         }
-
-        [data-theme="dark"] .dashboard-container {
-            background: var(--dark-surface);
-            border-color: var(--dark-border);
-        }
     </style>
 </head>
 
 <body>
     <nav class="navbar">
         <div class="container">
-            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <a href="index.html" class="logo" id="logo-link">Sponsorly</a>
             <ul class="nav-links">
-                <li><a href="discover.html">Discover</a></li>
-                <li><a href="profile.html">Profile</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <!-- Links will be dynamically injected by navbar.js -->
             </ul>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="nav-auth"></div>
         </div>
     </nav>
     <div class="main-content-wrapper">
         <div class="dashboard-container" style="height: auto; min-height: 200px; padding: 4rem 0;">
             <div class="dashboard-card">
                 <h1 id="welcome-msg">Loading...</h1>
-                <p id="role-msg"></p>
+                <!-- Mobile-only navigation -->
+                <div class="mobile-nav-buttons">
+                    <a href="dashboard.html" class="mobile-nav-btn active">Dashboard</a>
+                    <a href="discover.html" class="mobile-nav-btn">Discover</a>
+                </div>
             </div>
         </div>
 
@@ -441,23 +331,6 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="contact.html">Contact Support</a>
-                </div>
-                <div class="footer-socials">
-                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
-                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
-                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
-                </div>
-            </div>
-            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script>
         // Prevent bfcache restoration after logout
@@ -471,9 +344,8 @@
             }
         });
     </script>
-    <script src="js/navbar.js"></script>
     <script>
-        // Use shared navbar.js for hamburger/nav logic
+        //Use shared navbar.js for hamburger/nav logic
 
         const user = JSON.parse(localStorage.getItem('user'));
 
@@ -482,16 +354,18 @@
         } else {
             document.getElementById('welcome-msg').textContent = `Welcome, ${user.firstName || "User"}!`;
             if (user.role === 'creator') {
-                document.getElementById('role-msg').textContent = "This is creator homepage";
                 document.getElementById('discovery-title').textContent = "Featured Sponsors";
             } else if (user.role === 'sponsor') {
-                document.getElementById('role-msg').textContent = "This is sponsor homepage";
                 document.getElementById('discovery-title').textContent = "Top Creators";
             }
             fetchDiscovery();
         }
 
         async function fetchDiscovery() {
+            const grid = document.getElementById('discovery-grid');
+            // Show skeletons while loading
+            grid.innerHTML = Array(3).fill('<div class="card skeleton skeleton-card"></div>').join('');
+
             try {
                 const res = await fetch('/auth/discover', {
                     method: 'POST',
@@ -539,6 +413,45 @@
             window.location.replace('login.html');
         }
     </script>
+    <script src="js/navbar.js"></script>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Sponsorly</h3>
+                    <p>Where brands meet the right creators. The ultimate platform for seamless and effective
+                        sponsorship management.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="index.html#how-it-works">How it Works</a></li>
+                        <li><a href="discover.html">Discover</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="footer-socials">
+                        <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                        <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                        <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sponsorly. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

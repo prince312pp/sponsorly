@@ -71,50 +71,33 @@
         }
 
 
+        .connect-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.875rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(29, 155, 240, 0.3);
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
         .connect-btn:hover {
             opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(29, 155, 240, 0.4);
+            background-color: #1a8cd8;
         }
 
-        /* Dark mode styles for profile */
-        [data-theme="dark"] .profile-section {
-            background-color: var(--dark-surface);
+        .connect-btn:active {
+            transform: translateY(0);
         }
 
-        [data-theme="dark"] .profile-card {
-            background: var(--dark-surface);
-            color: var(--dark-text);
-            border: 1px solid var(--dark-border);
-        }
-
-        [data-theme="dark"] .detail-item {
-            background: var(--dark-surface);
-            border: 1px solid var(--dark-border);
-        }
-
-        [data-theme="dark"] .profile-header {
-            border-bottom: 1px solid var(--dark-border);
-        }
-
-        [data-theme="dark"] .profile-role {
-            background-color: var(--dark-hover-bg);
-            color: var(--primary-color);
-        }
-
-        [data-theme="dark"] .detail-label {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .detail-value {
-            color: var(--dark-text);
-        }
-
-        [data-theme="dark"] .nav-links a {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .nav-links a:hover {
-            color: var(--primary-color);
-        }
 
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
@@ -298,10 +281,6 @@
             width: 90%;
         }
 
-        [data-theme="dark"] .modal-content {
-            background: var(--dark-surface);
-            border-color: var(--dark-border);
-        }
 
         .modal-title {
             font-size: 1.5rem;
@@ -321,10 +300,6 @@
             gap: 1rem;
         }
 
-        [data-theme="dark"] .email-service-option {
-            background: var(--dark-bg);
-            border-color: var(--dark-border);
-        }
 
         .email-service-option:hover {
             background: var(--primary-color);
@@ -349,18 +324,9 @@
             font-size: 1rem;
         }
 
-        [data-theme="dark"] .modal-close {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-            border-color: var(--dark-border);
-        }
 
         .modal-close:hover {
             background: var(--secondary-dark);
-        }
-
-        [data-theme="dark"] .modal-close:hover {
-            background: var(--dark-border);
         }
     </style>
 </head>
@@ -368,21 +334,22 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <a href="index.html" class="logo" id="logo-link">Sponsorly</a>
             <ul class="nav-links">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <!-- Links will be dynamically injected by navbar.js -->
             </ul>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="nav-auth"></div>
         </div>
     </nav>
 
     <div class="profile-section">
         <div class="container">
+            <!-- Mobile-only navigation -->
+            <div class="mobile-nav-buttons">
+                <a href="dashboard.html" class="mobile-nav-btn">Dashboard</a>
+                <a href="discover.html" class="mobile-nav-btn">Discover</a>
+            </div>
+
             <div class="profile-card">
                 <div class="profile-header">
                     <div class="profile-avatar" id="avatar-initials">S</div>
@@ -421,27 +388,10 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="contact.html">Contact Support</a>
-                </div>
-                <div class="footer-socials">
-                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
-                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
-                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
-                </div>
-            </div>
-            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="js/navbar.js"></script>
     <script>
-        // Use shared navbar.js for hamburger/nav logic
+        // Use shared navbar.js for navigation logic
         // Prevent bfcache restoration after logout
 
         const userSession = JSON.parse(localStorage.getItem('user'));
@@ -497,9 +447,8 @@
             // Add Connect Now button if viewing someone else
             if (user.email !== userSession.email) {
                 document.getElementById('connect-container').innerHTML = `
-    <button onclick="connectNow('${user.email}')" class="connect-btn" style="border: none; cursor: pointer;">Connect
-        Now</button>
-    `;
+                    <button onclick="connectNow('${user.email}')" class="connect-btn">Connect Now</button>
+                `;
             } else {
                 document.getElementById('connect-container').innerHTML = '';
             }
@@ -508,75 +457,75 @@
             let linksHtml = '';
             if (user.links && user.links.length > 0) {
                 linksHtml = `
-    <div class="detail-item full-width">
-        <div class="detail-label">Links</div>
-        <div class="detail-value">
-            ${user.links.map(link => `<a href="${link.url}" target="_blank"
-                style="color: var(--primary-color); margin-right: 1.5rem; text-decoration: none;">${link.label}
-                &#8599;</a>`).join('')}
-        </div>
-    </div>
-    `;
+            <div class="detail-item full-width">
+                <div class="detail-label">Links</div>
+                <div class="detail-value">
+                    ${user.links.map(link => `<a href="${link.url}" target="_blank"
+                        style="color: var(--primary-color); margin-right: 1.5rem; text-decoration: none;">${link.label}
+                        &#8599;</a>`).join('')}
+                </div>
+            </div>
+            `;
             }
 
             let html = `
-    <div class="detail-item">
-        <div class="detail-label">Email Address</div>
-        <div class="detail-value">${user.email}</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Location</div>
-        <div class="detail-value">${user.location}</div>
-    </div>
-    <div class="detail-item full-width">
-        <div class="detail-label">Bio</div>
-        <div class="detail-value">${user.bio || 'No bio provided.'}</div>
-    </div>
-    ${linksHtml}
-    `;
+            <div class="detail-item">
+                <div class="detail-label">Email Address</div>
+                <div class="detail-value">${user.email}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Location</div>
+                <div class="detail-value">${user.location}</div>
+            </div>
+            <div class="detail-item full-width">
+                <div class="detail-label">Bio</div>
+                <div class="detail-value">${user.bio || 'No bio provided.'}</div>
+            </div>
+            ${linksHtml}
+            `;
 
             if (user.role === 'creator') {
                 html += `
-    <div class="detail-item">
-        <div class="detail-label">Platform</div>
-        <div class="detail-value">${user.platform}</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Handle</div>
-        <div class="detail-value">${user.handle}</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Followers</div>
-        <div class="detail-value">${Number(user.followers).toLocaleString()}</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Audience Reach</div>
-        <div class="detail-value">${user.audienceReach}</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Date of Birth</div>
-        <div class="detail-value">${new Date(user.dob).toLocaleDateString()}</div>
-    </div>
-    `;
+            <div class="detail-item">
+                <div class="detail-label">Platform</div>
+                <div class="detail-value">${user.platform}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Handle</div>
+                <div class="detail-value">${user.handle}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Followers</div>
+                <div class="detail-value">${Number(user.followers).toLocaleString()}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Audience Reach</div>
+                <div class="detail-value">${user.audienceReach}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Date of Birth</div>
+                <div class="detail-value">${new Date(user.dob).toLocaleDateString()}</div>
+            </div>
+            `;
             } else {
                 html += `
-    <div class="detail-item">
-        <div class="detail-label">Company Name</div>
-        <div class="detail-value">${user.companyName}</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Team Size</div>
-        <div class="detail-value">${user.noOfEmployees} employees</div>
-    </div>
-    <div class="detail-item">
-        <div class="detail-label">Monthly Budget</div>
-        <div class="detail-value">${user.budget}</div>
-    </div>
-    <div class="detail-item full-width">
-        <div class="detail-label">Collaboration Requirements</div>
-        <div class="detail-value">${user.requirements || 'None specified.'}</div>
-    </div>
-    `;
+            <div class="detail-item">
+                <div class="detail-label">Company Name</div>
+                <div class="detail-value">${user.companyName}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Team Size</div>
+                <div class="detail-value">${user.noOfEmployees} employees</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Monthly Budget</div>
+                <div class="detail-value">${user.budget}</div>
+            </div>
+            <div class="detail-item full-width">
+                <div class="detail-label">Collaboration Requirements</div>
+                <div class="detail-value">${user.requirements || 'None specified.'}</div>
+            </div>
+            `;
             }
 
             grid.innerHTML = html;
@@ -629,6 +578,44 @@
 
         fetchProfile();
     </script>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Sponsorly</h3>
+                    <p>Where brands meet the right creators. The ultimate platform for seamless and effective
+                        sponsorship management.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="index.html#how-it-works">How it Works</a></li>
+                        <li><a href="discover.html">Discover</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="footer-socials">
+                        <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                        <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                        <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sponsorly. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

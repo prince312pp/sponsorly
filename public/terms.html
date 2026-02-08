@@ -6,14 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Terms of Service | Sponsorly</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <nav class="navbar">
         <div class="container">
-            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <a href="index.html" class="logo" id="logo-link">Sponsorly</a>
             <ul class="nav-links" id="nav-links">
                 <li><a href="index.html#how-it-works">How it Works</a></li>
                 <li><a href="index.html#about">About</a></li>
@@ -22,11 +21,6 @@
             <div class="nav-auth">
                 <a href="login.html" class="btn-signin">Sign In</a>
             </div>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
     </nav>
 
@@ -66,28 +60,49 @@
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="contact.html">Contact Support</a>
-                </div>
-                <div class="footer-socials">
-                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
-                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
-                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
-                </div>
-            </div>
-            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="js/navbar.js"></script>
     <script>
         // Handle authenticated user (navbar.js handles mostly)
     </script>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Sponsorly</h3>
+                    <p>Where brands meet the right creators. The ultimate platform for seamless and effective
+                        sponsorship management.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="index.html#how-it-works">How it Works</a></li>
+                        <li><a href="discover.html">Discover</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="footer-socials">
+                        <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                        <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                        <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sponsorly. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

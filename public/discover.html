@@ -12,7 +12,7 @@
 
 
 
-        .container {
+        .main-container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 2rem;
@@ -140,9 +140,9 @@
         }
 
         .btn-secondary {
-            background: var(--secondary);
-            color: var(--text-primary);
-            border: none;
+            background: var(--light-gray);
+            color: var(--text-color);
+            border: 1px solid var(--caffeine-border);
             padding: 12px 24px;
             border-radius: 8px;
             font-size: 1rem;
@@ -150,11 +150,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             flex: 1;
-            margin-left: 10px;
         }
 
         .btn-secondary:hover {
-            background: var(--secondary-dark);
+            background: var(--dark-hover-bg);
             transform: translateY(-2px);
         }
 
@@ -192,10 +191,6 @@
             width: 90%;
         }
 
-        [data-theme="dark"] .modal-content {
-            background: var(--dark-surface);
-            border-color: var(--dark-border);
-        }
 
         .modal-title {
             font-size: 1.5rem;
@@ -216,10 +211,6 @@
             gap: 1rem;
         }
 
-        [data-theme="dark"] .email-service-option {
-            background: var(--dark-bg);
-            border-color: var(--dark-border);
-        }
 
         .email-service-option:hover {
             background: var(--primary-color);
@@ -244,66 +235,11 @@
             font-size: 1rem;
         }
 
-        [data-theme="dark"] .modal-close {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-            border-color: var(--dark-border);
-        }
 
         .modal-close:hover {
             background: var(--secondary-dark);
         }
 
-        [data-theme="dark"] .modal-close:hover {
-            background: var(--dark-border);
-        }
-
-        /* Dark mode support */
-        [data-theme="dark"] .filters {
-            background: var(--dark-surface);
-            border-color: var(--dark-border);
-        }
-
-        [data-theme="dark"] .filter-group select {
-            background: var(--dark-bg);
-            color: var(--dark-text);
-            border-color: var(--dark-border);
-        }
-
-        [data-theme="dark"] .user-card {
-            background: var(--dark-surface);
-            border-color: var(--dark-border);
-        }
-
-        [data-theme="dark"] .user-card:hover {
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        [data-theme="dark"] .user-header h3 {
-            color: var(--dark-text);
-        }
-
-        [data-theme="dark"] .user-email,
-        [data-theme="dark"] .user-bio,
-        [data-theme="dark"] .user-location,
-        [data-theme="dark"] .user-platform,
-        [data-theme="dark"] .user-followers,
-        [data-theme="dark"] .user-company,
-        [data-theme="dark"] .user-budget {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .no-users {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .nav-links a {
-            color: var(--dark-secondary-text);
-        }
-
-        [data-theme="dark"] .nav-links a:hover {
-            color: var(--primary-color);
-        }
 
         /* Tablet: 2 columns */
         @media (max-width: 1024px) {
@@ -324,7 +260,7 @@
                 gap: 1rem;
             }
 
-            .container {
+            .main-container {
                 padding: 0 1rem;
             }
 
@@ -343,22 +279,21 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">Sponsorly</a></div>
+            <a href="index.html" class="logo" id="logo-link">Sponsorly</a>
             <ul class="nav-links">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="discover.html">Discover</a></li>
-                <li><a href="profile.html">Profile</a></li>
-                <li><a href="#" onclick="logout()">Logout</a></li>
+                <!-- Links will be dynamically injected by navbar.js -->
             </ul>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="nav-auth"></div>
         </div>
     </nav>
 
-    <main class="container">
+    <main class="main-container">
+        <!-- Mobile-only navigation -->
+        <div class="mobile-nav-buttons">
+            <a href="dashboard.html" class="mobile-nav-btn">Dashboard</a>
+            <a href="discover.html" class="mobile-nav-btn active">Discover</a>
+        </div>
+
         <h1 class="section-title">Discover Creators & Sponsors</h1>
 
         <div class="filters">
@@ -382,23 +317,6 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="contact.html">Contact Support</a>
-                </div>
-                <div class="footer-socials">
-                    <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
-                    <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
-                    <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
-                </div>
-            </div>
-            <p class="copyright">&copy; 2026 Sponsorly. All rights reserved.</p>
-        </div>
-    </footer>
 
     <!-- Email Service Selection Modal -->
     <div class="modal-overlay" id="emailModal">
@@ -420,9 +338,48 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Sponsorly</h3>
+                    <p>Where brands meet the right creators. The ultimate platform for seamless and effective
+                        sponsorship management.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="index.html#how-it-works">How it Works</a></li>
+                        <li><a href="discover.html">Discover</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                        <li><a href="terms.html">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="footer-socials">
+                        <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
+                        <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
+                        <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Sponsorly. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="js/navbar.js"></script>
     <script>
-        // Use shared navbar.js for hamburger/nav logic
+        // Use shared navbar.js for navigation logic
         // Prevent bfcache restoration after logout
         window.addEventListener('pageshow', function (event) {
             if (event.persisted || (performance.getEntriesByType('navigation')[0] && performance.getEntriesByType('navigation')[0].type === 'back_forward')) {
@@ -469,6 +426,12 @@
         // Load users from API based on selected filter
         async function loadUsers() {
             const roleFilter = document.getElementById('role-filter').value;
+            const container = document.getElementById('users-container');
+
+            // Show skeletons while loading
+            if (container) {
+                container.innerHTML = Array(6).fill('<div class="user-card skeleton" style="height: 300px; width: 100%;"></div>').join('');
+            }
 
             try {
                 const response = await fetch('/auth/discover-same', {
@@ -548,6 +511,7 @@
                     ${user.companyName ? `<p class="user-company">Company: ${user.companyName}</p>` : ''}
                     ${user.budget ? `<p class="user-budget">Budget: ${user.budget}</p>` : ''}
                     <div class="user-actions">
+                        <a href="profile.html?email=${user.email}" class="btn-secondary" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center;">View Profile</a>
                         <button class="btn-primary" onclick="connectNow('${user.email}')">Connect Now</button>
                     </div>
                 `;
@@ -603,6 +567,7 @@
         // Initialize the page
         document.addEventListener('DOMContentLoaded', getCurrentUser);
     </script>
+    <script src="js/navbar.js"></script>
 </body>
 
 </html>
