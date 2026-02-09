@@ -41,6 +41,21 @@
     color: var(--primary-color);
 }
 
+.auth-logo {
+    display: block;
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-decoration: none;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    transition: color 0.2s;
+}
+
+.auth-logo:hover {
+    color: var(--primary-color);
+}
+
 form {
     text-align: left;
 }

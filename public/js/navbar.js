@@ -44,11 +44,29 @@ function initNavbar() {
     // 2. Update Navbar UI
     updateNavbarUI(user);
 
-    // 3. Dynamic Logo Redirection
+    // 3. Update Hero CTAs (if on landing page)
+    updateHeroCTAs(user);
+
+    // 4. Dynamic Logo Redirection
     const logoLinks = document.querySelectorAll('#logo-link');
     logoLinks.forEach(link => {
         link.href = isAuthenticated ? 'dashboard.html' : 'index.html';
     });
+}
+
+function updateHeroCTAs(user) {
+    if (!user) return;
+
+    const heroCtas = document.querySelector('.hero-ctas');
+    const finalCtas = document.querySelector('.cta-buttons');
+
+    const authenticatedBtns = `
+        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+        <a href="discover.html" class="btn btn-secondary">Discover Creators</a>
+    `;
+
+    if (heroCtas) heroCtas.innerHTML = authenticatedBtns;
+    if (finalCtas) finalCtas.innerHTML = authenticatedBtns;
 }
 
 function updateNavbarUI(user) {

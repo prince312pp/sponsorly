@@ -153,6 +153,10 @@
 
             .detail-item {
                 padding: 0.6rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
             }
 
             .detail-label {
@@ -475,7 +479,7 @@
             </div>
             <div class="detail-item">
                 <div class="detail-label">Location</div>
-                <div class="detail-value">${user.location}</div>
+                <div class="detail-value">${user.location || 'Not specified'}</div>
             </div>
             <div class="detail-item full-width">
                 <div class="detail-label">Bio</div>
@@ -511,15 +515,15 @@
                 html += `
             <div class="detail-item">
                 <div class="detail-label">Company Name</div>
-                <div class="detail-value">${user.companyName}</div>
+                <div class="detail-value">${user.companyName || 'Not specified'}</div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Team Size</div>
-                <div class="detail-value">${user.noOfEmployees} employees</div>
+                <div class="detail-value">${user.noOfEmployees ? user.noOfEmployees + ' employees' : 'Not specified'}</div>
             </div>
             <div class="detail-item">
                 <div class="detail-label">Monthly Budget</div>
-                <div class="detail-value">${user.budget}</div>
+                <div class="detail-value">${user.budget || 'Not specified'}</div>
             </div>
             <div class="detail-item full-width">
                 <div class="detail-label">Collaboration Requirements</div>

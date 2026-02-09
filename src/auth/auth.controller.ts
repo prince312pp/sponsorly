@@ -45,5 +45,8 @@ export class AuthController {
     return await this.authService.discoverSame(body.role, body.email);
   }
 
-
+  @Post('contact-support')
+  async contactSupport(@Body() body: { name: string; email: string; message: string }) {
+    return await this.authService.contactSupport(body);
+  }
 }

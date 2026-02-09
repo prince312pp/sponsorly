@@ -157,7 +157,7 @@
             }
 
             .discovery-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 0.75rem;
             }
 
@@ -195,14 +195,8 @@
                 padding: 0.5rem 0;
             }
 
-            .navbar .container {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
-
             .logo {
                 font-size: 1.2rem;
-                text-align: center;
             }
 
             .nav-links {
@@ -292,7 +286,7 @@
             }
 
             .discovery-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
         }
     </style>
@@ -364,7 +358,15 @@
         async function fetchDiscovery() {
             const grid = document.getElementById('discovery-grid');
             // Show skeletons while loading
-            grid.innerHTML = Array(3).fill('<div class="card skeleton skeleton-card"></div>').join('');
+            grid.innerHTML = Array(8).fill(`
+                <div class="skeleton-card">
+                    <div class="skeleton-avatar skeleton"></div>
+                    <div class="info" style="flex: 1;">
+                        <div class="skeleton-text long skeleton"></div>
+                        <div class="skeleton-text medium skeleton"></div>
+                    </div>
+                </div>
+            `).join('');
 
             try {
                 const res = await fetch('/auth/discover', {
@@ -390,8 +392,8 @@
 
         function renderCards(items) {
             const grid = document.getElementById('discovery-grid');
-            // Show only first 9 items
-            grid.innerHTML = items.slice(0, 9).map(item => `
+            // Show only first 8 items
+            grid.innerHTML = items.slice(0, 8).map(item => `
     <div class="card" onclick="window.location.href='profile.html?email=${item.email}'" style="cursor: pointer;">
         <div class="avatar">${item.firstName[0]}</div>
         <div class="info">

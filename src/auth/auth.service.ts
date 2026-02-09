@@ -60,14 +60,39 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await this.userModel.create({
+    // Extract all fields from registration data
+    const userData: any = {
       firstName,
       lastName,
       email,
       password: hashedPassword,
       role,
       verified: true, // Auto-verify users
+    };
+
+    // Add optional fields if they exist
+    const optionalFields = [
+      'bio',
+      'location',
+      'links',
+      'platform',
+      'handle',
+      'followers',
+      'audienceReach',
+      'dob',
+      'companyName',
+      'noOfEmployees',
+      'budget',
+      'requirements',
+    ];
+
+    optionalFields.forEach((field) => {
+      if (data[field] !== undefined && data[field] !== null && data[field] !== '') {
+        userData[field] = data[field];
+      }
     });
+
+    const user = await this.userModel.create(userData);
 
     return {
       message: 'Registration successful.',
@@ -206,5 +231,24 @@ export class AuthService {
       .select(
         'firstName lastName email platform followers budget companyName role bio location',
       );
+  }
+
+  /* -------------------------------- SUPPORT -------------------------------- */
+
+  async contactSupport(data: { name: string; email: string; message: string }) {
+    const { name, email, message } = data;
+
+    if (!name || !email || !message) {
+      throw new BadRequestException('All fields (name, email, message) are required');
+    }
+
+    // In a real app, this would send an email or save to a "SupportTicket" collection.
+    // For now, we log it and return success to satisfy the frontend.
+    this.logger.log(`Received contact support request from ${name} (${email}): ${message}`);
+
+    return {
+      success: true,
+      message: 'Message received. We will get back to you soon.',
+    };
   }
 }
