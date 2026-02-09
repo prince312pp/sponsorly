@@ -1,42 +1,54 @@
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('pageshow', (event) => {
+    // If we're coming from history (back/forward), re-initialize to check auth state
     initNavbar();
 });
 
 function initNavbar() {
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    const user = JSON.parse(localStorage.getItem('user'));
+    const userString = localStorage.getItem('user');
+    const token = localStorage.getItem('access_token');
+    let user = null;
 
-    // 1. Update Navbar based on Auth State
+    try {
+        if (userString) user = JSON.parse(userString);
+    } catch (e) {
+        console.error("Error parsing user data");
+    }
+
+    // Normalize path for robust matching (handles case-sensitivity, clean URLs, and trailing slashes)
+    const path = window.location.pathname.toLowerCase();
+    const filename = path.split('/').pop() || 'index';
+    const cleanName = filename.replace('.html', '');
+
+    // List of pages with their canonical "clean" names
+    const publicOnlyPages = ['login', 'register-sponsor', 'register-creator'];
+    const protectedPages = ['dashboard', 'profile', 'edit-profile', 'discover'];
+
+    const isPublicOnly = publicOnlyPages.includes(cleanName);
+    const isProtected = protectedPages.includes(cleanName);
+
+    // 1. Redirection Logic (Check token and basic user structure)
+    const isAuthenticated = user && token && (user.email || user.id);
+
+    if (isAuthenticated) {
+        if (isPublicOnly) {
+            window.location.replace('dashboard.html');
+            return;
+        }
+    } else {
+        if (isProtected) {
+            window.location.replace('login.html?message=auth_required');
+            return;
+        }
+    }
+
+    // 2. Update Navbar UI
     updateNavbarUI(user);
 
     // 3. Dynamic Logo Redirection
-    const logoLink = document.getElementById('logo-link');
-    if (logoLink) {
-        logoLink.addEventListener('click', (e) => {
-            const token = localStorage.getItem('access_token');
-            if (token) {
-                // For logged in users, clicking logo takes them to dashboard
-                e.preventDefault();
-                if (window.location.pathname.includes('dashboard.html')) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    window.location.href = 'dashboard.html';
-                }
-            } else {
-                // For guests, clicking logo takes them to index.html
-                if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('sposnsorly/')) {
-                    // Stay on page and scroll to top if already on index
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    e.preventDefault();
-                    window.location.href = 'index.html';
-                }
-            }
-        });
-    }
-
+    const logoLinks = document.querySelectorAll('#logo-link');
+    logoLinks.forEach(link => {
+        link.href = isAuthenticated ? 'dashboard.html' : 'index.html';
+    });
 }
 
 function updateNavbarUI(user) {
@@ -58,10 +70,7 @@ function updateNavbarUI(user) {
                 <div class="nav-auth-group">
                     <div class="profile-dropdown">
                         <button class="profile-icon" id="profile-toggle" title="User Menu">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
+                            <span class="avatar-initials">${user.firstName[0]}</span>
                         </button>
                         <div class="dropdown-menu" id="dropdown-menu">
                             <div class="dropdown-header">
@@ -76,12 +85,7 @@ function updateNavbarUI(user) {
                         </div>
                     </div>
                     <a href="#" onclick="logout()" class="btn-logout-main" title="Logout">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16 17 21 12 16 7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                        </svg>
-                        <span class="desktop-only">Logout</span>
+                        Logout
                     </a>
                 </div>
             `;
@@ -129,4 +133,11 @@ function logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('access_token');
     window.location.replace('login.html');
+}
+
+// Ensure navbar initializes on DOM load and script load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNavbar);
+} else {
+    initNavbar();
 }

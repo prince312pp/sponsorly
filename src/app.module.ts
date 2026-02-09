@@ -20,6 +20,9 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
+      serveStaticOptions: {
+        fallthrough: true,
+      },
     }),
   ],
   controllers: [AppController],

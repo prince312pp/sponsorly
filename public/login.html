@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Login | Sponsorly</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
@@ -31,7 +31,7 @@
             <h1>Welcome Back</h1>
             <p>Sign in to manage your sponsorships.</p>
 
-            <form id="login-form">
+            <form id="login-form" autocomplete="off">
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" name="email" required placeholder="john@example.com" autocomplete="off">
@@ -39,7 +39,11 @@
 
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" name="password" required placeholder="password" autocomplete="off">
+                    <input type="password" name="password" required placeholder="password" autocomplete="new-password">
+                </div>
+
+                <div id="info-message"
+                    style="color: var(--primary-color); font-size: 0.875rem; margin-bottom: 1rem; display: none; padding: 0.75rem; border: 1px solid var(--primary-color); border-radius: 8px; background: rgba(99, 102, 241, 0.1); font-weight: 500;">
                 </div>
 
                 <div id="error-message"
@@ -93,12 +97,26 @@
         </div>
     </footer>
 
-    <script src="js/navbar.js"></script>
+    <script src="/js/navbar.js"></script>
     <script>
+        // Check for message query parameter
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const messageType = params.get('message');
+            const infoDiv = document.getElementById('info-message');
+
+            if (messageType === 'auth_required') {
+                infoDiv.textContent = 'Please sign in or register to continue.';
+                infoDiv.style.display = 'block';
+            }
+        });
+
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const errorDiv = document.getElementById('error-message');
+            const infoDiv = document.getElementById('info-message');
             errorDiv.style.display = 'none';
+            infoDiv.style.display = 'none';
 
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
@@ -131,44 +149,6 @@
             }
         });
     </script>
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h3>Sponsorly</h3>
-                    <p>Where brands meet the right creators. The ultimate platform for seamless and effective
-                        sponsorship management.</p>
-                </div>
-                <div class="footer-column">
-                    <h4>Platform</h4>
-                    <ul>
-                        <li><a href="index.html#how-it-works">How it Works</a></li>
-                        <li><a href="discover.html">Discover</a></li>
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Follow Us</h4>
-                    <div class="footer-socials">
-                        <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
-                        <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
-                        <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Sponsorly. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
 </body>
 
 </html>

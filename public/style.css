@@ -148,14 +148,13 @@ body {
 .btn-logout-main {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     color: #ff4d4d;
     text-decoration: none;
     font-size: 0.9rem;
-    font-weight: 500;
-    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
     border-radius: 8px;
-    border: 1px solid rgba(255, 77, 77, 0.2);
+    border: 1px solid rgba(255, 77, 77, 0.4);
     transition: all 0.3s;
 }
 
@@ -172,14 +171,19 @@ body {
 }
 
 .profile-icon {
-    background: none;
+    background: var(--primary-color);
     border: none;
-    color: var(--secondary-color);
+    color: white;
     cursor: pointer;
-    padding: 0.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    transition: color 0.3s;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s;
 }
 
 .profile-icon:hover {
