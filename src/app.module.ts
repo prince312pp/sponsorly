@@ -17,7 +17,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UsersModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'public'),
+      rootPath: join(process.cwd(), 'public'),
       serveStaticOptions: {
         fallthrough: true,
       },

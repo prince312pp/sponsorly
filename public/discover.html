@@ -316,6 +316,10 @@
             <!-- Users will be loaded here -->
         </div>
 
+        <div id="pagination-container" class="pagination">
+            <!-- Pagination will be injected here -->
+        </div>
+
     </main>
 
 
@@ -341,39 +345,13 @@
 
     <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h3>Sponsorly</h3>
-                    <p>Where brands meet the right creators. The ultimate platform for seamless and effective
-                        sponsorship management.</p>
-                </div>
-                <div class="footer-column">
-                    <h4>Platform</h4>
-                    <ul>
-                        <li><a href="index.html#how-it-works">How it Works</a></li>
-                        <li><a href="discover.html">Discover</a></li>
-                        <li><a href="dashboard.html">Dashboard</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="contact.html">Contact Us</a></li>
-                        <li><a href="privacy.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Follow Us</h4>
-                    <div class="footer-socials">
-                        <a href="https://twitter.com/sponsorly" target="_blank">Twitter</a>
-                        <a href="https://linkedin.com/company/sponsorly" target="_blank">LinkedIn</a>
-                        <a href="https://instagram.com/sponsorly" target="_blank">Instagram</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
+            <div class="footer-content">
                 <p>&copy; 2026 Sponsorly. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="contact.html">Contact Us</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -395,6 +373,9 @@
 
         let allUsers = [];
         let currentUser = null;
+        let currentPage = 1;
+        let limit = 9;
+        let totalUsers = 0;
 
         // Get current user from token
         async function getCurrentUser() {
@@ -416,7 +397,7 @@
                     roleFilter.value = 'creator'; // Sponsors want to find creators
                 }
 
-                loadUsers();
+                loadUsers(1);
             } catch (error) {
                 console.error('Invalid token:', error);
                 localStorage.removeItem('access_token');
@@ -425,7 +406,8 @@
         }
 
         // Load users from API based on selected filter
-        async function loadUsers() {
+        async function loadUsers(page = 1) {
+            currentPage = page;
             const roleFilter = document.getElementById('role-filter').value;
             const container = document.getElementById('users-container');
 
@@ -441,13 +423,21 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                     },
-                    body: JSON.stringify({ role: roleFilter, email: currentUser.email })
+                    body: JSON.stringify({
+                        role: roleFilter,
+                        email: currentUser.email,
+                        page: currentPage,
+                        limit: limit
+                    })
                 });
 
                 if (response.ok) {
-                    allUsers = await response.json();
-                    console.log(`Loaded ${allUsers.length} users for filter: ${roleFilter}`);
+                    const data = await response.json();
+                    allUsers = data.users;
+                    totalUsers = data.total;
+                    console.log(`Loaded ${allUsers.length} users (Total: ${totalUsers}) for filter: ${roleFilter}`);
                     renderUsers(allUsers);
+                    renderPagination();
                 } else {
                     console.error('Failed to load users');
                 }
@@ -456,9 +446,42 @@
             }
         }
 
+        // Render Pagination UI
+        function renderPagination() {
+            const container = document.getElementById('pagination-container');
+            if (!container) return;
+
+            const totalPages = Math.ceil(totalUsers / limit);
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = `
+                <button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="loadUsers(${currentPage - 1})">Previous</button>
+                <div class="pagination-info">Page ${currentPage} of ${totalPages}</div>
+            `;
+
+            // Simple pagination: Show current, previous and next
+            for (let i = 1; i <= totalPages; i++) {
+                // Show first, last, and pages around current
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="loadUsers(${i})">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span style="color: var(--secondary-color)">...</span>`;
+                }
+            }
+
+            html += `
+                <button class="pagination-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="loadUsers(${currentPage + 1})">Next</button>
+            `;
+
+            container.innerHTML = html;
+        }
+
         // Filter users by role - reload from API
         function filterUsers() {
-            loadUsers(); // Reload data from API with new filter
+            loadUsers(1); // Reset to page 1 on filter change
         }
 
         // Search users locally in already loaded data

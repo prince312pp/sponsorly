@@ -62,7 +62,6 @@ function updateHeroCTAs(user) {
 
     const authenticatedBtns = `
         <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
-        <a href="discover.html" class="btn btn-secondary">Discover Creators</a>
     `;
 
     if (heroCtas) heroCtas.innerHTML = authenticatedBtns;
@@ -126,7 +125,6 @@ function updateNavbarUI(user) {
         // Guest State
         navHtml = `
             <li><a href="index.html#how-it-works">How it Works</a></li>
-            <li><a href="discover.html">Discover</a></li>
             <li class="mobile-only"><a href="login.html">Dashboard</a></li>
             <li><a href="contact.html">Contact</a></li>
         `;

@@ -41,8 +41,9 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('discover-same')
-  async discoverSame(@Body() body: { role: string; email: string }) {
-    return await this.authService.discoverSame(body.role, body.email);
+  async discoverSame(@Body() body: { role: string; email: string; page?: number; limit?: number }) {
+    const { role, email, page, limit } = body;
+    return await this.authService.discoverSame(role, email, page, limit);
   }
 
   @Post('contact-support')

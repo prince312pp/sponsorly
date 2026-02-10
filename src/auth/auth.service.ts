@@ -35,9 +35,12 @@ export class AuthService {
       throw new BadRequestException('Missing required fields');
     }
 
+    // Normalize email
+    const normalizedEmail = email.toLowerCase();
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(normalizedEmail)) {
       throw new BadRequestException('Invalid email format');
     }
 
@@ -53,7 +56,7 @@ export class AuthService {
     }
 
     // Check if user already exists
-    const existingUser = await this.userModel.findOne({ email });
+    const existingUser = await this.userModel.findOne({ email: normalizedEmail });
     if (existingUser) {
       throw new BadRequestException('User already exists');
     }
@@ -64,10 +67,10 @@ export class AuthService {
     const userData: any = {
       firstName,
       lastName,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
       role,
-      verified: true, // Auto-verify users
+      verified: false, // Updated: Default to false as per system rules
     };
 
     // Add optional fields if they exist
@@ -112,13 +115,16 @@ export class AuthService {
       throw new BadRequestException('Email and password are required');
     }
 
+    // Normalize email
+    const normalizedEmail = email.toLowerCase();
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(normalizedEmail)) {
       throw new BadRequestException('Invalid email format');
     }
 
-    const user = await this.userModel.findOne({ email }).select('+password');
+    const user = await this.userModel.findOne({ email: normalizedEmail }).select('+password');
 
     if (!user) {
       throw new BadRequestException('Invalid credentials');
@@ -152,7 +158,8 @@ export class AuthService {
       throw new BadRequestException('Email is required');
     }
 
-    const user = await this.userModel.findOne({ email }).select('-password');
+    const normalizedEmail = email.toLowerCase();
+    const user = await this.userModel.findOne({ email: normalizedEmail }).select('-password');
 
     if (!user) throw new NotFoundException('User not found');
     return user;
@@ -181,15 +188,23 @@ export class AuthService {
     ];
 
     // Filter updates to only allow safe fields
-    const safeUpdates = {};
+    const safeUpdates: any = {};
     for (const [key, value] of Object.entries(updates)) {
       if (allowedFields.includes(key)) {
-        safeUpdates[key] = value;
+        // If updating links, ensure it's an array of LinkDto-like objects
+        if (key === 'links' && Array.isArray(value)) {
+          safeUpdates[key] = value.filter(link =>
+            link && typeof link.label === 'string' && typeof link.url === 'string'
+          );
+        } else {
+          safeUpdates[key] = value;
+        }
       }
     }
 
+    const normalizedEmail = email.toLowerCase();
     const user = await this.userModel.findOneAndUpdate(
-      { email },
+      { email: normalizedEmail },
       { $set: safeUpdates },
       { new: true, runValidators: true },
     );
@@ -214,23 +229,31 @@ export class AuthService {
       );
   }
 
-  async discoverSame(role: string, email: string) {
+  async discoverSame(role: string, email: string, page: number = 1, limit: number = 9) {
     if (!role || !email) {
       throw new BadRequestException('Role and email are required');
     }
 
-    const query: any = { verified: true, email: { $ne: email } };
+    const normalizedEmail = email.toLowerCase();
+    const query: any = { verified: true, email: { $ne: normalizedEmail } };
     if (role && role !== 'all') {
-      query.role = role;
+      query.role = role.toLowerCase() === 'sponsor' ? 'creator' : 'sponsor';
     }
 
     this.logger.log(`Discovering users with query: ${JSON.stringify(query)}`);
 
-    return this.userModel
-      .find(query)
-      .select(
-        'firstName lastName email platform followers budget companyName role bio location',
-      );
+    const skip = (page - 1) * limit;
+    const [users, total] = await Promise.all([
+      this.userModel
+        .find(query)
+        .select('firstName lastName email platform followers budget companyName role bio location')
+        .skip(skip)
+        .limit(limit)
+        .exec(),
+      this.userModel.countDocuments(query),
+    ]);
+
+    return { users, total };
   }
 
   /* -------------------------------- SUPPORT -------------------------------- */
