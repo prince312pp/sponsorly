@@ -11,6 +11,7 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 
 import { User, UserDocument } from '../users/schemas/user.schema';
+import { SupportTicket, SupportTicketDocument } from '../support/schemas/support-ticket.schema';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 
@@ -20,6 +21,7 @@ export class AuthService {
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(SupportTicket.name) private supportTicketModel: Model<SupportTicketDocument>,
     private configService: ConfigService,
     private jwtService: JwtService,
   ) { }
@@ -221,7 +223,7 @@ export class AuthService {
       throw new BadRequestException('Role is required');
     }
 
-    const targetRole = role === 'sponsor' ? 'creator' : 'sponsor';
+    const targetRole = role;
     return this.userModel
       .find({ role: targetRole, verified: true })
       .select(
@@ -237,7 +239,7 @@ export class AuthService {
     const normalizedEmail = email.toLowerCase();
     const query: any = { verified: true, email: { $ne: normalizedEmail } };
     if (role && role !== 'all') {
-      query.role = role.toLowerCase() === 'sponsor' ? 'creator' : 'sponsor';
+      query.role = role.toLowerCase();
     }
 
     this.logger.log(`Discovering users with query: ${JSON.stringify(query)}`);
@@ -265,9 +267,14 @@ export class AuthService {
       throw new BadRequestException('All fields (name, email, message) are required');
     }
 
-    // In a real app, this would send an email or save to a "SupportTicket" collection.
-    // For now, we log it and return success to satisfy the frontend.
-    this.logger.log(`Received contact support request from ${name} (${email}): ${message}`);
+    // Save ticket to database
+    const ticket = await this.supportTicketModel.create({
+      name,
+      email,
+      message,
+    });
+
+    this.logger.log(`Saved contact support request from ${name} (${email}) with ID: ${ticket._id}`);
 
     return {
       success: true,
