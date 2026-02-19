@@ -72,7 +72,6 @@ export class AuthService {
       email: normalizedEmail,
       password: hashedPassword,
       role,
-      verified: false, // Updated: Default to false as per system rules
     };
 
     // Add optional fields if they exist
@@ -142,7 +141,6 @@ export class AuthService {
     );
 
     return {
-      verified: true,
       access_token: token,
       user: {
         firstName: user.firstName,
@@ -225,7 +223,7 @@ export class AuthService {
 
     const targetRole = role;
     return this.userModel
-      .find({ role: targetRole, verified: true })
+      .find({ role: targetRole })
       .select(
         'firstName lastName email platform followers budget companyName role bio location',
       );
@@ -237,7 +235,7 @@ export class AuthService {
     }
 
     const normalizedEmail = email.toLowerCase();
-    const query: any = { verified: true, email: { $ne: normalizedEmail } };
+    const query: any = { email: { $ne: normalizedEmail } };
     if (role && role !== 'all') {
       query.role = role.toLowerCase();
     }

@@ -101,15 +101,9 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    if (result.verified === false) {
-                        localStorage.setItem('pendingEmail', result.email);
-                        errorDiv.style.display = 'block';
-                        errorDiv.innerHTML = result.message;
-                    } else {
-                        localStorage.setItem('user', JSON.stringify(result.user));
-                        localStorage.setItem('access_token', result.access_token);
-                        window.location.href = 'dashboard.html';
-                    }
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                    localStorage.setItem('access_token', result.access_token);
+                    window.location.href = 'dashboard.html';
                 } else {
                     errorDiv.textContent = result.message;
                     errorDiv.style.display = 'block';

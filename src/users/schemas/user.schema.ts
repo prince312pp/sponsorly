@@ -20,9 +20,6 @@ export class User {
   @Prop({ required: true, enum: ['creator', 'sponsor'] })
   role: string;
 
-  @Prop({ default: true })
-  verified: boolean;
-
   @Prop()
   bio: string;
 
